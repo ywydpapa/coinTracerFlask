@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        {% include './comm/adheader.html' %}
+</head>
+<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        {% include './comm/sidebar.html' %}
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content">
+                {% include './comm/adtopbar.html' %}
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <!-- Page Heading -->
+                    <div class="row" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                        <h1 class="h3 mb-4 text-gray-800">편집</h1>
+                        </div>
+                        <div>
+                            <a href="{% if boardcont[0][1] == 0 %}/noticelist{% else %}/boardlist{% endif %}"><h3 class="h3 mb-4 text-gray-800">목록으로</h3></a>
+                        </div>
+                    </div>
+
+                    <form action="/updateboard" method="post" onsubmit="return confirm('수정한 내용을 저장하시겠습니까?');">
+                    <div>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td style="text-align: center">
+                                    제목
+                                </td>
+                                <td>
+                                    <input type="hidden" id="boardno" name="boardno" class="form-control" value="{{ boardcont[0][0] }}">
+                                    <input type="hidden" id="boardid" name="boardid" class="form-control" value="{{ boardcont[0][1] }}">
+                                    <input type="text" id="boardtitle" name="boardtitle" class="form-control" value="{{ boardcont[0][3] }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center">
+                                    내용
+                                </td>
+                                <td>
+                                    <textarea class="form-control" id="boardcontents" name="boardcontents">{{ boardcont[0][4] }}</textarea>
+                                </td>
+                            </tr>
+                            <tr style="text-align: center">
+                                <td colspan="2"><button type="submit" class="btn btn-primary" id="updateboard">저장</button> <button type="reset" class="btn btn-danger" id="canceledit">취소</button></td>
+                            </tr>
+                        </table>
+                    </div>
+                    </form>
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+            <!-- End of Main Content -->
+             <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; K3 Labs 2024</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+        </div>
+        <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+     <!-- Bootstrap core JavaScript-->
+{% include './comm/adscript.html' %}
+</body>
+</html>

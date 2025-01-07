@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        {% include '/comm/adheader.html' %}
+</head>
+<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        {% include '/comm/sidebar.html' %}
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content">
+                {% include '/comm/adtopbar.html' %}
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-4 text-gray-800">상세 설정 관리</h1>
+                    <hr>
+                    <div>
+             <form action="/setupbidadmin" method="post" onsubmit="return confirm('설정내용을 저장하시겠습니까?');">
+                <table class="table table-bordered">
+                <colgroup>
+    	             <col width="20%" />
+                     <col width="20%" />
+                     <col width="20%" />
+                     <col width="15%" />
+                     <col width="15%" />
+                     <col width="10%" />
+                </colgroup>
+                    <thead>
+                    <tr>
+                        <td style="text-align: center">
+                            <h5>트레이딩 설정명</h5>
+                        </td>
+                        <td colspan="2">
+                            <input name="settitle" type="text" class="form-control" value="" placeholder="설정명을 입력해 주십시오!!">
+                        </td>
+                        <td colspan="2">
+                            <button type="submit" value="submit" class="form-control btn btn-primary"> 신규저장 </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center"> <h5>시작 금액 (1차 구매)</h5></td>
+                        <td colspan="2">
+                            <input id="initprice" name="initprice" class="form-control" type="text" value="10000" placeholder="10,000" style = "text-align: right" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+                        </td>
+                        <td  colspan="2" style="text-align: center">
+                            <input type="text" name="skey" value="{{ session["setkey"] }}" style="display: none">
+                            <input type="text" name="userno" value="{{ session["userNo"] }}" style="display: none">
+                            <input type="text" name="svrno" value="{{ session["serverNo"] }}" style="display: none">
+                            <input type="checkbox" id="chkyn" name="chkyn" style="display: none" >
+                            <h6 style="color: #ff0000">금액은 시뮬레이션용으로 설정값으로 저장되지 않습니다.</h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center"> <h5>구간 설정</h5></td>
+                        <td colspan="2">
+                            <select id="bidsteps" name="bidsteps" class="form-control" style="text-align: right">
+                                <option value="6" >07</option>
+                                <option value="7" selected>08</option>
+                                <option value="8" >09</option>
+                                <option value="9" >10</option>
+                            </select>
+                        </td>
+                        <td colspan="2">
+                            <button type="button" class="form-control btn btn-primary" onclick="setbid()">일반설정적용</button>
+                        </td>
+                    <td><button type="button" class="form-control btn btn-primary" onclick="setbid2()">더블설정적용</button></td>
+                    </tr>
+                    </thead>
+                    <tr>
+                        <td style="text-align: center"> <h5>구간 간격 (%) </h5></td>
+                        <td colspan="2">
+                            <div style="text-align: right">
+                            <div>
+                            <input id="steprate" name="steprate" style="text-align: right" class="form-control" type="number" min="0" max="10" step="0.01" value="1.0">
+                            </div>
+                            </div>
+                        </td>
+                        <td colspan="2" style="text-align: center">
+                            일괄설정<br>
+                            <input type="checkbox" id="gapchkb">
+                        </td>
+                        <td style="text-align: center" rowspan="2">
+                            <label for ="doublechk">더블 투자 적용</label>
+                            <br>
+                            <input type="checkbox" id="doublechk" name="doublechk" >
+                            <h6 style="color: #ff0000">더블투자적용은 시뮬레이션용입니다.</h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center"> <h5>설정 이율 (%) </h5></td>
+                        <td colspan="2">
+                            <div>
+                            <div>
+                            <input id="profitrate" name="profitrate" style="text-align: right" class="form-control" type="number" min="0" max="10" step="0.01" value="0.5">
+                            </div>
+                            </div>
+                        </td>
+                        <td colspan="2" style="text-align: center">
+                            일괄설정<br>
+                            <input type="checkbox" id="intchkb" checked disabled>
+                        </td>
+                    </tr>
+                    <tr style="text-align: center">
+                        <td>
+
+                        </td>
+                        <td>
+                            매수금액
+                        </td>
+                        <td>
+                            필요금액
+                        </td>
+                        <td>
+                            간격(%)
+                        </td>
+                        <td>
+                            이율(%)
+                        </td>
+                        <td>
+                            Delay 작동
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; vertical-align: center"> <h5>최초 구매 </h5></td>
+                        <td id="trvalst" style="text-align: right">
+                        </td>
+                        <td style="text-align: right" id = "trsumst">
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center"> <h5>2차 구매 </h5></td>
+                        <td class="trval" style="text-align: right">
+
+                        </td>
+                        <td style="text-align: right" class = "trsum">
+                        </td>
+                        <td>
+                             <input id="gap01" name="gap01" style="text-align: right" class="form-control gapinput" type="number" min="0" max="5" step="0.01" value="">
+                        </td>
+                        <td>
+                            <input id="int01" name="int01" style="text-align: right" class="form-control intinput" type="number" min="0" max="5" step="0.01" value="0.5">
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                <tr>
+                        <td style="text-align: center"> <h5>3차 구매 </h5></td>
+                        <td class="trval" style="text-align: right">
+                        </td>
+                        <td style="text-align: right" class = "trsum">
+                        </td>
+                        <td>
+                             <input id="gap02" name="gap02" style="text-align: right" class="form-control gapinput" type="number" min="0" max="5" step="0.01" value="">
+                        </td>
+                        <td>
+                            <input id="int02" name="int02" style="text-align: right" class="form-control intinput" type="number" min="0" max="5" step="0.01" value="0.5">
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                <tr>
+                        <td style="text-align: center"> <h5>4차 구매 </h5></td>
+                        <td class="trval" style="text-align: right">
+                        </td>
+                        <td style="text-align: right" class = "trsum">
+                        </td>
+                        <td>
+                             <input id="gap03" name="gap03" style="text-align: right" class="form-control gapinput" type="number" min="0" max="5" step="0.01" value="">
+                        </td>
+                        <td>
+                            <input id="int03" name="int03" style="text-align: right" class="form-control intinput" type="number" min="0" max="5" step="0.01" value="0.5">
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                <tr>
+                        <td style="text-align: center"> <h5>5차 구매 </h5></td>
+                        <td class="trval" style="text-align: right">
+
+                        </td>
+                        <td style="text-align: right" class = "trsum">
+                        </td>
+                        <td>
+                             <input id="gap04" name="gap04" style="text-align: right" class="form-control gapinput" type="number" min="0" max="10" step="0.01" value="">
+                        </td>
+                        <td>
+                            <input id="int04" name="int04" style="text-align: right" class="form-control intinput" type="number" min="0" max="5" step="0.01" value="0.5">
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                <tr>
+                        <td style="text-align: center"> <h5>6차 구매 </h5></td>
+                        <td class="trval" style="text-align: right">
+
+                        </td>
+                        <td style="text-align: right" class = "trsum">
+                        </td>
+                        <td>
+                             <input id="gap05" name="gap05" style="text-align: right" class="form-control gapinput" type="number" min="0" max="10" step="0.01" value="">
+                        </td>
+                        <td>
+                            <input id="int05" name="int05" style="text-align: right" class="form-control intinput" type="number" min="0" max="5" step="0.01" value="0.5">
+                        </td>
+                        <td style="vertical-align: center; text-align: center">
+                                <input type="radio" name = "holdon" value="6" checked>
+                            <label for="holdon"> 6차 매수 홀딩</label>
+                        </td>
+                    </tr>
+                <tr>
+                        <td style="text-align: center"> <h5>7차 구매 </h5></td>
+                        <td class="trval" style="text-align: right">
+
+                        </td>
+                        <td style="text-align: right" class = "trsum">
+                        </td>
+                        <td>
+                             <input id="gap06" name="gap06" style="text-align: right" class="form-control gapinput" type="number" min="0" max="10" step="0.01" value="">
+                        </td>
+                        <td>
+                            <input id="int06" name="int06" style="text-align: right" class="form-control intinput" type="number" min="0" max="5" step="0.01" value="0.5">
+                        </td>
+                        <td style="vertical-align: center; text-align: center">
+                            <input type="radio" name = "holdon" value="7">
+                            <label for="holdon"> 7차 매수 홀딩</label>
+                        </td>
+                    </tr>
+                <tr>
+                        <td style="text-align: center"> <h5>8차 구매 </h5></td>
+                        <td class="trval" style="text-align: right">
+
+                        </td>
+                        <td style="text-align: right" class = "trsum">
+                        </td>
+                        <td>
+                             <input id="gap07" name="gap07" style="text-align: right" class="form-control gapinput" type="number" min="0" max="10" step="0.01" value="">
+                        </td>
+                        <td>
+                            <input id="int07" name="int07" style="text-align: right" class="form-control intinput" type="number" min="0" max="5" step="0.01" value="0.5">
+                        </td>
+                    <td style="vertical-align: center; text-align: center"><input type="radio" name = "holdon" value="8">
+                        <label for="holdon"> 8차 매수 홀딩</label>
+                    </td>
+                    </tr>
+                <tr>
+                        <td style="text-align: center"> <h5>9차 구매 </h5></td>
+                        <td class="trval" style="text-align: right">
+
+                        </td>
+                        <td style="text-align: right" class = "trsum">
+                        </td>
+                        <td>
+                             <input id="gap08" name="gap08" style="text-align: right" class="form-control gapinput" type="number" min="0" max="10" step="0.01" value="">
+                        </td>
+                        <td>
+                            <input id="int08" name="int08" style="text-align: right" class="form-control intinput" type="number" min="0" max="5" step="0.01" value="0.5">
+                        </td>
+                        <td style="vertical-align: center; text-align: center"><input type="radio" name = "holdon" value="9">
+                            <label for="holdon"> 9차 매수 홀딩</label>
+                        </td>
+                    </tr>
+                <tr>
+                        <td style="text-align: center"> <h5>10차 구매 </h5></td>
+                        <td class="trval" style="text-align: right">
+
+                        </td>
+                        <td style="text-align: right" class = "trsum">
+                        </td>
+                        <td>
+                             <input id="gap09" name="gap09" style="text-align: right" class="form-control gapinput" type="number" min="0" max="10" step="0.01" value="">
+                        </td>
+                        <td>
+                            <input id="int09" name="int09" style="text-align: right" class="form-control intinput" type="number" min="0" max="5" step="0.01" value="0.5">
+                        </td>
+                    <td style="vertical-align: center; text-align: center"><input type="radio" name = "holdon" value="10">
+                        <label for="holdon"> 10차 매수 홀딩</label>
+                    </td>
+                </tr>
+                </table>
+             </form>
+             </div>
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+            <!-- End of Main Content -->
+             <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; K3 Labs 2024</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+        </div>
+        <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+     <!-- Bootstrap core JavaScript-->
+{% include '/comm/adscript.html' %}
+</body>
+<script>
+    $(document).ready(function () {
+    });
+
+    $('#initprice').change(function(){
+        var valu = $('#initprice').val();
+        if (valu < 10000){
+            valu = 10000
+        }
+        $('#initprice').val(numberWithCommas(valu));
+        document.getElementById('trvalst').innerText = "-";
+        document.getElementById('trsumst').innerText = "-";
+    });
+
+    $('#steprate').change(function(){
+        var grate = $('#steprate').val();
+        var $Garr = $(".gapinput");
+        if ($('#gapchkb').is(":checked") === true) {
+            for ( i=0; i< $Garr.length; i++){
+             $Garr[i].value = grate;
+            }
+        }else{
+
+        }
+    });
+
+    $("#chkyn").change(function(){
+    var sno = $("#setno").val();
+    if($('input[name="chkyn"]').is(":checked") === true){
+        settyn(sno,"Y");
+    } else {
+    settyn(sno,"N");
+    }
+    });
+
+    function settyn(sno,yn){
+        data = [sno,yn]
+        $.ajax({
+            type: "POST",
+            url: '/settingyn',
+            data: data,
+            processData: false,
+            contentType: false,
+            success: (res) => {
+                console.log(res);
+                location.reload();
+                }
+        });
+    }
+
+    $('#profitrate').change(function(){
+        var irate  = $('#profitrate').val();
+        var $Iarr = $(".intinput");
+        if ($('#intchkb').is(":checked") === true) {
+            for (k=0; k<$Iarr.length; k++){
+                $Iarr[k].value = irate;
+            }
+        } else {
+        }
+    });
+
+    function numberWithCommas(x) {
+		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+    function numberNoneCommas(x) {
+		return x.toString().replace(/[\D\s\._\-]+/g, "");
+	}
+
+    function setbid(){
+        var intv = numberNoneCommas($('#initprice').val());
+        var $Aarr = $(".trval");
+        var $Barr = $(".trsum");
+        var setval = intv;
+        var sumval = parseInt(intv);
+        document.getElementById('trvalst').innerText = numberWithCommas(setval);
+        document.getElementById('trsumst').innerText = numberWithCommas(setval);
+        for (var i = 0; i < 10; i++) {
+            if (i < $("#bidsteps").val()){
+            setval = setval *2 ;
+            sumval = parseInt(sumval) + parseInt(setval);
+            $Aarr[i].innerText = numberWithCommas(setval);
+            $Barr[i].innerText = numberWithCommas(sumval);
+            } else {
+                $Aarr[i].innerText = "0";
+                $Barr[i].innerText = "0";
+            }
+        }
+    }
+
+    function setbid2(){
+        var intv = numberNoneCommas($('#initprice').val());
+        var $Aarr = $(".trval");
+        var $Barr = $(".trsum");
+        var setval = intv;
+        var sumval = parseInt(intv);
+        document.getElementById('trvalst').innerText = numberWithCommas(setval);
+        document.getElementById('trsumst').innerText = numberWithCommas(setval);
+        for (var i = 0; i < 10; i++) {
+            if (i < $("#bidsteps").val()){
+            setval = sumval *2 ;
+            sumval = parseInt(sumval) + parseInt(setval);
+            $Aarr[i].innerText = numberWithCommas(setval);
+            $Barr[i].innerText = numberWithCommas(sumval);
+            } else {
+                $Aarr[i].innerText = "0";
+                $Barr[i].innerText = "0";
+            }
+        }
+    }
+
+</script>
+</html>

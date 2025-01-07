@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+{% include '/comm/header.html' %}
+<style>
+    .container{
+        padding-right: 0;
+        overflow: auto;
+    }
+
+    .chartContents > div{
+        border: 1px solid #BDBDBD;
+        padding: 10px;
+        margin-right: 20px;
+        margin-bottom: 20px;
+    }
+
+</style>
+</head>
+<body>
+    <div id="commonTopHeader">
+{% include '/comm/commTopHeader.html' %}
+    </div>
+
+    <div id="commonBodyContents">
+{% include '/comm/sidemenuadmin.html' %}
+        <!-- commonSideMenu end-->
+
+        <div id="commonContent">
+            <div class="container">
+            <hr>
+             <div>
+             <div style="float:right"><button class="btn btn-danger" onclick="savelist()">추천종목 저장</button></div>
+             <table class="table">
+             <thead style="text-align: center">
+             <th>코인명</th>
+             <th>현재가</th>
+             <th>매수 거래량</th>
+             <th>매도 거래량</th>
+             <th>추천여부</th>
+             </thead>
+                 {% for coin in coindtls %}
+                     <tr>
+                     <td style="text-align: center" class="coinn">{{ coin["market"] }}</td>
+                     <td style="text-align:right" class="askprice"> {{ coin["orderbook_units"][0]['ask_price'] }}</td>
+                     <td style="text-align:right" class="bidsize"> {{ coin["total_bid_size"] }}</td>
+                         <td style="text-align:right" class="asksize">{{ coin["total_ask_size"] }}</td>
+                     <td style="text-align: center"><input type="checkbox" class="chkhot" name="hotchk"></td>
+                     </tr>
+                 {% endfor %}
+             </table>
+             </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $(document).ready(function () {
+        makecurrency();
+    });
+
+    function makecurrency(){
+        var $Aarr = $(".askprice");
+        var $Barr = $(".bidsize");
+        var $Carr = $(".asksize");
+        for (var i = 0; i < $Aarr.length; i++){
+            var price = $Aarr[i].innerText;
+            var bidsz = $Barr[i].innerText;
+            bidsz = Math.round(bidsz);
+            var asksz = $Carr[i].innerText;
+            asksz = Math.round(asksz);
+            $Aarr[i].innerText = numberWithCommas(price);
+            $Barr[i].innerText = numberWithCommas(bidsz);
+            $Carr[i].innerText = numberWithCommas(asksz);
+        }
+    }
+
+    function numberWithCommas(x) {
+		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+    function numberNoneCommas(x) {
+		return x.toString().replace(/[\D\s\._\-]+/g, "");
+	}
+
+    function hotyn(coinn,yn){
+        data = [coinn,yn]
+        $.ajax({
+            type: "POST",
+            url: '/hotyn',
+            data: data,
+            processData: false,
+            contentType: false,
+            success: (res) => {
+                console.log(res);
+                }
+        });
+    }
+
+    function savelist(){
+          var $Aarr = $(".coinn");
+          var $Barr = $(".chkhot");
+          for (var i = 0; i < $Aarr.length; i++){
+              if ($Barr[i].checked === true){
+                  var coin = $Aarr[i].innerText;
+                  var yn = 'Y';
+                  hotyn(coin, yn);
+              } else {
+                  var coin = $Aarr[i].innerText;
+                  var yn = 'N';
+                  hotyn(coin, yn);
+              }
+          }
+    }
+</script>
+</html>

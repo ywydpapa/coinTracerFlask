@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% include '/comm/header.html' %}
+<style>
+    .container{
+        padding-right: 0;
+        overflow: auto;
+    }
+
+    .chartContents{
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        padding-bottom: 20px;
+    }
+
+    .chartContents > div{
+        border: 1px solid #BDBDBD;
+        padding: 10px;
+        box-shadow: 1px solid #BDBDBD;
+        box-shadow: 3px 3px 3px 3px #BDBDBD;
+        margin-right: 20px;
+        margin-bottom: 20px;
+    }
+
+</style>
+</head>
+<body>
+    <div id="commonTopHeader">
+{% include '/comm/commTopHeader.html' %}
+    </div>
+
+    <div id="commonBodyContents">
+{% include '/comm/sidemenu.html' %}
+        <!-- commonSideMenu end-->
+
+        <div id="commonContent">
+            <div class="container">
+            <table class="table table-bordered">
+            <thead>
+            <tr style="text-align: center">
+                <th>자산명</th>
+                <th>잔고</th>
+                <th>거래중</th>
+                <th>평균매입가</th>
+                <th>현재평가액</th>
+                <th>시장가 매도</th>
+            </tr>
+            </thead>
+                {% for item in witems %}
+                    <tr style="text-align: right">
+                    <td class = "coins" style="text-align: center" >{{ item["currency"] }}</td>
+                    <td class="vola">{{ item["balance"] }}</td>
+                    <td class="volb">{{ item["locked"] }}</td>
+                    <td class = "coins aprice">{{ item["avg_buy_price"] }}</td>
+                    <td style="text-align: right" class="cvalue" ></td>
+                    <td style="text-align: center">
+                        {% if item["currency"]!="KRW" %}
+                        <button class = "btn form-control btn-primary" onclick="sellcoin({{ session["userNo"] }},'{{ item["currency"] }}')">매도</button>
+                        {% endif %}
+                    </td>
+                    </tr>
+                {% endfor %}
+            <tr>
+                <td style="text-align: center" colspan="4">현재 원화 가치 합계</td>
+                <td id="wonsum" style="text-align: right"></td>
+                <td></td>
+            </tr>
+            </table>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $(document).ready(function () {
+        calcvalue();
+    });
+
+
+    function sellcoin(uno,coinn){
+        if (confirm("본 코인을 시장가로 매도하시겠습니까? 자산이 5,000원 미만인 경우 5,000원을 추가로 매입하여 일괄 매도합니다.")){
+        data = [uno,coinn]
+        console.log(data);
+        $.ajax({
+            type: "POST",
+            url: '/sellcoin',
+            data: data,
+            processData: false,
+            contentType: false,
+            success: (res) => {
+                console.log(res);
+                location.reload();
+                }
+        });
+        }else{}}
+
+    function numberWithCommas(x) {
+		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+
+    function numberNoneCommas(x) {
+		return x.toString().replace(/[\D\s\._\-]+/g, "");
+	}
+
+    function calcvalue(){
+        $Aarr = $(".vola");
+        $Barr = $(".volb");
+        $Carr = $(".aprice");
+        $Darr = $(".cvalue");
+        var nprice = 0;
+        var wonsum = 0;
+        for (var i = 0; i < $Darr.length; i++) {
+            var aval = parseFloat($Aarr[i].innerText);
+            var bval = parseFloat($Barr[i].innerText);
+            var cval = parseFloat($Carr[i].innerText);
+            if (cval == 0) {
+                cval = 1;
+            }
+            nprice = parseInt(Math.round((aval+bval)*cval));
+            wonsum = wonsum + nprice;
+            $Darr[i].innerText = numberWithCommas(nprice);
+        }
+        $("#wonsum").html(numberWithCommas(wonsum));
+    }
+</script>
+</html>

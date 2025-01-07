@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% include '/comm/header.html' %}
+<style>
+    .container{
+        padding-right: 0;
+        overflow: auto;
+    }
+
+    .chartContents{
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        padding-bottom: 20px;
+    }
+
+    .chartContents > div{
+        border: 1px solid #BDBDBD;
+        padding: 10px;
+        box-shadow: 3px 3px 3px 3px #BDBDBD;
+        margin-right: 20px;
+        margin-bottom: 20px;
+    }
+
+</style>
+</head>
+<body>
+    <div id="commonTopHeader">
+{% include '/comm/commTopHeader.html' %}
+    </div>
+
+    <div id="commonBodyContents">
+{% include '/comm/sidemenu.html' %}
+        <!-- commonSideMenu end-->
+
+        <div id="commonContent">
+            <div class="container">
+            <hr>
+             <div>
+             <form action="/setupbid" method="post" onsubmit="return confirm('설정내용을 저장하시겠습니까?');">
+                <table class="table table-bordered">
+                <colgroup>
+    	             <col width="20%" />
+                     <col width="30%" />
+                     <col width="30%" />
+                     <col width="20%" />
+                </colgroup>
+                    <thead>
+                    <tr>
+                        <td style="text-align: center">
+                            <h5>선택 코인</h5>
+                        </td>
+                        <td colspan="2">
+                            <select id="coinn" name="coinn" class="form-control form-controm-sm">
+                                    {% for coin in coinlist %}
+                                       <option value="{{ coin }}" {% if coin==coinn %}selected{% endif %}>{{ coin }}</option>
+                                    {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <button type="submit" value="submit" class="form-control btn btn-primary">저장</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center"> <h5>시작 금액 (1차 매수)</h5></td>
+                        <td colspan="2">
+                            <input id="initprice" name="initprice" class="form-control" type="text" value="5000" placeholder="5,000" style = "text-align: right" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
+                        </td>
+                        <td>
+                            <input type="text" name="skey" value="{{ session["setkey"] }}" style="display: none">
+                            <input type="text" name="userno" value="{{ session["userNo"] }}" style="display: none">
+                            <input type="text" name="svrno" value="{{ session["serverNo"] }}" style="display: none">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center"> <h5>구간 설정</h5></td>
+                        <td colspan="2">
+                            <select id="bidsteps" name="bidsteps" class="form-control" style="text-align: right">
+                                <option value="5">06</option>
+                                <option value="6">07</option>
+                                <option value="7">08</option>
+                                <option value="8">09</option>
+                                <option value="9" selected >10</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="button" class="form-control btn btn-primary" onclick="setbid()">소요금액확인</button>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tr>
+                        <td style="text-align: center"> <h5>투자 성향 </h5></td>
+                        <td colspan="2">
+                            <select id="tradeset" name="tradeset" class="form-control" style="text-align: right">
+                                {% for set in setlist %}
+                                <option value="{{ set[0] }}">{{ set[1] }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr style="text-align: center">
+                        <td>
+                        </td>
+                        <td>
+                            매수금액
+                        </td>
+                        <td>
+                            필요금액
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center; vertical-align: center"> <h5>1차 매수 </h5></td>
+                        <td id="trvalst" style="text-align: right">
+                        </td>
+                        <td style="text-align: right" id = "trsumst">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center"> <h5>2차 매수 </h5></td>
+                        <td class="trval" style="text-align: right">
+
+                        </td>
+                        <td style="text-align: right" class = "trsum">
+                        </td>
+                    </tr>
+                <tr>
+                        <td style="text-align: center"> <h5>3차 매수 </h5></td>
+                        <td class="trval" style="text-align: right">
+                        </td>
+                        <td style="text-align: right" class = "trsum">
+                        </td>
+                    </tr>
+                <tr>
+                        <td style="text-align: center"> <h5>4차 매수 </h5></td>
+                        <td class="trval" style="text-align: right">
+                        </td>
+                        <td style="text-align: right" class = "trsum">
+                        </td>
+                    </tr>
+                <tr>
+                        <td style="text-align: center"> <h5>5차 매수 </h5></td>
+                        <td class="trval" style="text-align: right">
+
+                        </td>
+                        <td style="text-align: right" class = "trsum">
+                        </td>
+                    </tr>
+                <tr>
+                        <td style="text-align: center"> <h5>6차 매수 </h5></td>
+                        <td class="trval" style="text-align: right">
+
+                        </td>
+                        <td style="text-align: right" class = "trsum">
+                        </td>
+                    </tr>
+                <tr>
+                        <td style="text-align: center"> <h5>7차 매수 </h5></td>
+                        <td class="trval" style="text-align: right">
+
+                        </td>
+                        <td style="text-align: right" class = "trsum">
+                        </td>
+                    </tr>
+                <tr>
+                        <td style="text-align: center"> <h5>8차 매수 </h5></td>
+                        <td class="trval" style="text-align: right">
+
+                        </td>
+                        <td style="text-align: right" class = "trsum">
+                        </td>
+                    </tr>
+                <tr>
+                        <td style="text-align: center"> <h5>9차 매수 </h5></td>
+                        <td class="trval" style="text-align: right">
+
+                        </td>
+                        <td style="text-align: right" class = "trsum">
+                        </td>
+                    </tr>
+                <tr>
+                        <td style="text-align: center"> <h5>10차 매수 </h5></td>
+                        <td class="trval" style="text-align: right">
+
+                        </td>
+                        <td style="text-align: right" class = "trsum">
+                        </td>
+                    </tr>
+                </table>
+             </form>
+             </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $(document).ready(function () {
+    });
+
+    $('#initprice').change(function(){
+        var valu = $('#initprice').val();
+        if (valu < 5000){
+            valu = 5000
+        }
+        $('#initprice').val(numberWithCommas(valu));
+        document.getElementById('trvalst').innerText = "-";
+        document.getElementById('trsumst').innerText = "-";
+    });
+
+    $('#steprate').change(function(){
+        var grate = $('#steprate').val();
+    });
+
+
+    $('#profitrate').change(function(){
+        var irate  = $('#profitrate').val();
+        var $Iarr = $(".intinput");
+        if ($('#intchkb').is(":checked") === true) {
+            for (k=0; k<$Iarr.length; k++){
+                $Iarr[k].value = irate;
+            }
+        } else {
+
+        }
+    });
+
+    function numberWithCommas(x) {
+		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+
+    function numberNoneCommas(x) {
+		return x.toString().replace(/[\D\s\._\-]+/g, "");
+	}
+
+    function setbid(){
+        var intv = numberNoneCommas($('#initprice').val());
+        var $Aarr = $(".trval");
+        var $Barr = $(".trsum");
+        var setval = intv;
+        var sumval = parseInt(intv);
+        document.getElementById('trvalst').innerText = numberWithCommas(setval);
+        document.getElementById('trsumst').innerText = numberWithCommas(setval);
+        for (var i = 0; i < 10; i++) {
+            if (i < $("#bidsteps").val()){
+            setval = setval *2 ;
+            sumval = parseInt(sumval) + parseInt(setval);
+            $Aarr[i].innerText = numberWithCommas(setval);
+            $Barr[i].innerText = numberWithCommas(sumval);
+            } else {
+                $Aarr[i].innerText = numberWithCommas(0);
+                $Barr[i].innerText = numberWithCommas(0);
+            }
+        }
+    }
+
+</script>
+</html>
