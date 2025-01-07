@@ -15,6 +15,7 @@ from comm.dbconn import (selectUsers, setKeys, checkwallet, tradehistory, hotcoi
                          mysettinglist, getsetupmax, erasebid, getsetups, setonoffs, editbidsetup, getlicence,
                          mytradesetlist, setallonoff, custlist, custdetail, insertcust, changesvr, getsetupitem,
                          sellmycoinpercent)
+from comm.upbitdata import dashcandle548, get_ticker_tradevalue, dashcandle160
 import pyupbit
 import os
 from dotenv import load_dotenv
