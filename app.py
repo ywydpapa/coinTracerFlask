@@ -19,6 +19,7 @@ from comm.upbitdata import dashcandle548, get_ticker_tradevalue, dashcandle160
 import pyupbit
 import os
 from dotenv import load_dotenv
+import ssl
 
 
 load_dotenv()
