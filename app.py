@@ -4,9 +4,9 @@ from datetime import datetime
 from flask import Flask, render_template, request, redirect, session
 from flask_bootstrap import Bootstrap
 from comm.dbconn import (selectUsers, setKeys, checkwallet, tradehistory, hotcoinlist, setupbid, getsetup, setonoff, \
-                         checkwalletwon, getorderlist, listUsers, detailuser, setupbidadmin, selectsets,
+                         checkwalletwon, getorderlist, listUsers, detailuser, setuptrbidadmin, selectsets,
                          setdetail, selectsetlist, \
-                         setmypasswd, updateuserdetail, updatebidadmin, settingonoff, hotcoinlist, sethotcoin,
+                         setmypasswd, updateuserdetail, updatetrbidadmin, settingonoff, hotcoinlist, sethotcoin,
                          selectboardlist, boarddetail, resethotcoins, setLog, \
                          boardupdate, boardnewwrite, setholdreset, getmessage, cancelorder, gettop20, tradehistorys,
                          servicestatus,
@@ -404,7 +404,7 @@ def setupmybidadmin():
         settitle = request.form.get('settitle')
         skey = request.form.get('skey')
         svrno = request.form.get('svrno')
-        g0 = request.form.get('steprate')
+        g0 = request.form.get('gap00')
         g1 = request.form.get('gap01')
         g2 = request.form.get('gap02')
         g3 = request.form.get('gap03')
@@ -423,7 +423,7 @@ def setupmybidadmin():
             g9 = request.form.get('gap09')
         else:
             g9 = g8
-        r0 = request.form.get('profitrate')
+        r0 = request.form.get('int00')
         r1 = request.form.get('int01')
         r2 = request.form.get('int02')
         r3 = request.form.get('int03')
@@ -433,13 +433,27 @@ def setupmybidadmin():
         r7 = request.form.get('int07')
         r8 = request.form.get('int08')
         r9 = request.form.get('int09')
-        hyn = request.form.get('holdon')
-        dyn = request.form.get('doublechk')
-        if dyn == 'on':
-            dyn = 'Y'
-        else:
-            dyn = 'N'
-        setupbidadmin(uno, skey, settitle, bidsteps, g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, hyn, dyn)
+        b0 = request.form.get('bid00')
+        b1 = request.form.get('bid01')
+        b2 = request.form.get('bid02')
+        b3 = request.form.get('bid03')
+        b4 = request.form.get('bid04')
+        b5 = request.form.get('bid05')
+        b6 = request.form.get('bid06')
+        b7 = request.form.get('bid07')
+        b8 = request.form.get('bid08')
+        b9 = request.form.get('bid09')
+        m0 = request.form.get('max00')
+        m1 = request.form.get('max01')
+        m2 = request.form.get('max02')
+        m3 = request.form.get('max03')
+        m4 = request.form.get('max04')
+        m5 = request.form.get('max05')
+        m6 = request.form.get('max06')
+        m7 = request.form.get('max07')
+        m8 = request.form.get('max08')
+        m9 = request.form.get('max09')
+        setuptrbidadmin(uno, skey, settitle, bidsteps, g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,m0,m1,m2,m3,m4,m5,m6,m7,m8,m9)
     return redirect('/setlist')
 
 
@@ -663,7 +677,7 @@ def updateset():
     bidsteps = request.form.get('bidsteps')
     settitle = request.form.get('settitle')
     skey = request.form.get('skey')
-    g0 = request.form.get('steprate')
+    g0 = request.form.get('gap00')
     g1 = request.form.get('gap01')
     g2 = request.form.get('gap02')
     g3 = request.form.get('gap03')
@@ -673,7 +687,7 @@ def updateset():
     g7 = request.form.get('gap07')
     g8 = request.form.get('gap08')
     g9 = request.form.get('gap09')
-    r0 = request.form.get('profitrate')
+    r0 = request.form.get('int00')
     r1 = request.form.get('int01')
     r2 = request.form.get('int02')
     r3 = request.form.get('int03')
@@ -683,14 +697,28 @@ def updateset():
     r7 = request.form.get('int07')
     r8 = request.form.get('int08')
     r9 = request.form.get('int09')
-    hyn = request.form.get('holdon')
-    dyn = request.form.get('doublechk')
-    if dyn == 'on':
-        dyn = 'Y'
-    else:
-        dyn = 'N'
+    b0 = request.form.get('bid00')
+    b1 = request.form.get('bid01')
+    b2 = request.form.get('bid02')
+    b3 = request.form.get('bid03')
+    b4 = request.form.get('bid04')
+    b5 = request.form.get('bid05')
+    b6 = request.form.get('bid06')
+    b7 = request.form.get('bid07')
+    b8 = request.form.get('bid08')
+    b9 = request.form.get('bid09')
+    m0 = request.form.get('max00')
+    m1 = request.form.get('max01')
+    m2 = request.form.get('max02')
+    m3 = request.form.get('max03')
+    m4 = request.form.get('max04')
+    m5 = request.form.get('max05')
+    m6 = request.form.get('max06')
+    m7 = request.form.get('max07')
+    m8 = request.form.get('max08')
+    m9 = request.form.get('max09')
     setno = request.form.get('setno')
-    updatebidadmin(uno, skey, settitle, bidsteps, g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, hyn, dyn, setno)
+    updatetrbidadmin(uno, skey, settitle, bidsteps, g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, setno)
     rows = selectsets()
     return render_template('./admin/setlistn.html', rows = rows)
 
