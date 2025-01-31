@@ -13,7 +13,7 @@ from comm.dbconn import (selectUsers, setKeys, checkwallet, tradehistory, hotcoi
                          tradelist, readmsg, gettradelog, tradedcoins, modifyLog, insertLog, getmytrlog, getmyincomes,
                          checkwalletremains,
                          mysettinglist, getsetupmax, erasebid, getsetups, setonoffs, editbidsetup, getlicence,
-                         mytradesetlist, setallonoff, custlist, custdetail, insertcust, changesvr, getsetupitem,
+                         mytradesetlist, setallonoff, custlist, custdetail, insertcust, changesvr, getsetupitem,incomesum,
                          sellmycoinpercent)
 from comm.upbitdata import dashcandle548, get_ticker_tradevalue, dashcandle160
 import pyupbit
@@ -800,6 +800,12 @@ def msgread():
     readmsg(msgno)
     return "CHECK"
 
+
+@app.route('/incomesummary', methods=['POST','GET'])
+def incomesummary():
+    uno = request.args.get('uno')
+    item = incomesum(uno)
+    return render_template('./trade/incsum.html', items = item)
 
 @app.route('/serverStatus')
 def serverStatus():
