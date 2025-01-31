@@ -84,12 +84,9 @@
 
     function setcurr(){
         $Aarr = $(".vola");
-        $Barr = $(".volb");
         for (var i = 0; i < $Aarr.length; i++) {
             var cur = $Aarr[i].innerText;
-            var inccur = $Barr[i].innerText;
-            $(".vola").html(numberWithCommas(cur));
-            $(".volb").html(numberWithCommas(inccur));
+            $Aarr[i].innerText = numberWithCommas(cur);
         }
     }
 
@@ -97,6 +94,7 @@
         $Aarr = $(".vola");
         $Barr = $(".volb");
         for (var i = 0; i<$Aarr.length; i++){
+            var aval = 0;
             if (i === 0){
                 var cur = $Aarr[i].innerText;
             }else{
@@ -104,7 +102,8 @@
             }
             var bur = $Aarr[i].innerText;
             aval = bur - cur ;
-            $Barr[i].innerText = aval;
+            $Barr[i].innerText = numberWithCommas(aval);
+
         }
     }
 
