@@ -39,6 +39,10 @@
                                          <td class="volb"></td>
                                          </tr>
                                         {% endfor %}
+                                    <tr>
+                                        <td colspan="2" style="text-align: center"> 차액 합계</td>
+                                        <td id="suminc" style="text-align: right"></td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -93,6 +97,7 @@
     function calbenifit(){
         $Aarr = $(".vola");
         $Barr = $(".volb");
+        var suminc = 0;
         for (var i = 0; i<$Aarr.length; i++){
             var aval = 0;
             if (i === 0){
@@ -102,9 +107,10 @@
             }
             var bur = $Aarr[i].innerText;
             aval = bur - cur ;
+            suminc = suminc + aval; ;
             $Barr[i].innerText = numberWithCommas(aval);
-
         }
+        $("#suminc").html(numberWithCommas(suminc));
     }
 
 
