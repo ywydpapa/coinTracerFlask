@@ -329,7 +329,6 @@ def setupmybid():
     else:
         uno = request.form.get('userno')
         slot = request.form.get('tabindex')
-        bidsetps = request.form.get('bidsteps')
         initprice = request.form.get('initprice')
         initprice = initprice.replace(',', '')
         bidrate = 1.00
@@ -337,6 +336,7 @@ def setupmybid():
         askrate = 0.5
         tradeset = request.form.get('tradeset')
         tradeset = tradeset.split(',')[0]
+        bidsetps = tradeset.split(',')[1]
         coinn1 = request.form.get('coinn1')
         coinn2 = request.form.get('coinn2')
         coinn3 = request.form.get('coinn3')
