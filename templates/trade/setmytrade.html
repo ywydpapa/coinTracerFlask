@@ -129,8 +129,9 @@
                                          </tr>
                                          <tr>
                                              <td style="text-align: center"> <h5>투자 한계 금액(각 코인별)</h5></td>
-                                             <td colspan="2"><select id="limitamt" name="limitamt" class="form-control" style="text-align: right">
-                                             <option value="1000000">1,000,000</option>
+                                             <td colspan="2">
+                                             <select id="limitamt" name="limitamt" class="form-control" style="text-align: right">
+                                                 <option value="1000000">1,000,000</option>
                                                  <option value="2000000">2,000,000</option>
                                                  <option value="3000000" selected>3,000,000</option>
                                                  <option value="4000000">4,000,000</option>
@@ -253,8 +254,8 @@
      let setb = {};
      let setm = {};
      {% for set in setlist %}
-        setb{{ set[0] }} = [{{ set[23] }},{{ set[24] }},{{ set[25] }},{{ set[26] }},{{ set[27] }},{{ set[28] }},{{ set[29] }},{{ set[30] }},{{ set[31] }},{{ set[32] }}];
-        setm{{ set[0] }} = [{{ set[33] }},{{ set[34] }},{{ set[35] }},{{ set[36] }},{{ set[37] }},{{ set[38] }},{{ set[39] }},{{ set[40] }},{{ set[41] }},{{ set[42] }}];
+        setb{{ loop.index }} = [{{ set[23] }},{{ set[24] }},{{ set[25] }},{{ set[26] }},{{ set[27] }},{{ set[28] }},{{ set[29] }},{{ set[30] }},{{ set[31] }},{{ set[32] }}];
+        setm{{ loop.index }} = [{{ set[33] }},{{ set[34] }},{{ set[35] }},{{ set[36] }},{{ set[37] }},{{ set[38] }},{{ set[39] }},{{ set[40] }},{{ set[41] }},{{ set[42] }}];
      {% endfor %}
 
     $('#initprice').change(function(){
@@ -359,12 +360,15 @@
 	}
 
     function setbid(){
-        let obj = {};
+
         var setno = $('#tradeset').val()[0];
+        alert(setno);
+        var indx = document.getElementById("tradeset").selectedIndex+1;
+        alert(indx);
         var $Aarr = $(".trval");
         var $Barr = $(".trsum");
         var setval = setb;
-        console.log(setval);
+
     }
 
 </script>
