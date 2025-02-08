@@ -85,6 +85,7 @@
                                            <th>일자</th>
                                            <th>매도횟수</th>
                                            <th>매도금액합계</th>
+                                           <th>수익율</th>
                                            <th>수익금액</th>
                                        </tr>
                                     </thead>
@@ -93,6 +94,19 @@
                                            <td id = "profdate" style="text-align: center"></td>
                                            <td id = "askcnt" style="text-align: right"></td>
                                            <td id = "asksum" style="text-align: right"></td>
+                                           <td id = "benerate" style="text-align: right" >
+                                               <select class = "form-control-sm text-center" data-style = "text-right">
+                                                   <option value="0.1">0.1%</option>
+                                                   <option value="0.2">0.2%</option>
+                                                   <option value="0.3">0.3%</option>
+                                                   <option value="0.4" selected>0.4%</option>
+                                                   <option value="0.5">0.5%</option>
+                                                   <option value="0.6">0.6%</option>
+                                                   <option value="0.7">0.7%</option>
+                                                   <option value="0.8">0.8%</option>
+                                                   <option value="0.9">0.9%</option>
+                                                   <option value="1.0">1.0%</option>
+                                               </select></td>
                                            <td id = "askprofit" style="text-align: right"></td>
                                        </tr>
                                     </tbody>
@@ -227,10 +241,10 @@
             }
             if (caldate === tdate) {
                 if (buysel === "매수") {
-                    var sett = parseFloat(mpr) * parseFloat(exvol) + parseFloat(fee);
+                    sett = parseFloat(mpr) * parseFloat(exvol) + parseFloat(fee);
                     bidsum = bidsum + sett;
                 } else if (buysel === "매도") {
-                    var sett = parseFloat(mpr) * parseFloat(exvol) - parseFloat(fee);
+                    sett = parseFloat(mpr) * parseFloat(exvol) - parseFloat(fee);
                     asksum = asksum + sett;
                     askcnt = askcnt +1;
                 }
@@ -244,7 +258,9 @@
             sett = Math.round(sett);
             $Carr[i].innerText = numberWithCommas(sett);
         }
-        var apprate = {{ myset[4] }}/100;
+        var brate = $("#benerate option:selected").val();
+        var apprate = brate/100;
+        console.log(brate);
         var profit = asksum* apprate;
         var askasset = calaskasset({{ myset[1] }},{{ myset[2] }},"{{ myset[9] }}");
         var earnrate = profit / askasset * 100;
@@ -260,6 +276,11 @@
     $("#tradedate").change(function (){
         $("#searchdateto").val($("#tradedate").val());
     });
+
+    $("#benerate").change(function (){
+        calprofit();
+    });
+
 
     $("#trcoinselector").change(function(){
         var selctcoin = $("#trcoinselector").val();
