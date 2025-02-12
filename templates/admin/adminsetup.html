@@ -39,7 +39,7 @@
                             <button type="submit" value="submit" class="btn btn-primary btn-lg"> 신규저장 </button>
                         </td>
                     </tr>
-                    <tr>
+                    <tr style="display: none">
                         <td style="text-align: center"> <h5>시작 금액 (1차 구매)</h5></td>
                         <td colspan="2">
                             <input id="initprice" name="initprice" class="form-control" type="text" value="10000" placeholder="10,000" style = "text-align: right" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
@@ -65,7 +65,6 @@
                             </select>
                         </td>
                         <td colspan="2" style="text-align: center">
-                            <button type="button" class="btn btn-primary btn-lg" onclick="setbid()">설정확인표시</button>
                         </td>
                     </tr>
                     </thead>
