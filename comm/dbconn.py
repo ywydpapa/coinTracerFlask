@@ -843,7 +843,7 @@ def tradelist():
     db39 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur39 = db39.cursor()
     try:
-        sql = "select b.userName, a.*, c.setTitle, c.holdNo from traceSetup a join traceUser b on a.userNo = b.userNo join traceSets c on a.custKey = c.setNo where a.attrib = %s"
+        sql = "select b.userName, a.*, c.setTitle from traceSetup a join traceUser b on a.userNo = b.userNo join traceSets c on a.custKey = c.setNo where a.attrib = %s"
         cur39.execute(sql, "100001000010000")
         rows = cur39.fetchall()
     except Exception as e:
