@@ -260,7 +260,6 @@
         }
         var brate = $("#benerate option:selected").val();
         var apprate = brate/100;
-        console.log(brate);
         var profit = asksum* apprate;
         var askasset = calaskasset({{ myset[1] }},{{ myset[2] }},"{{ myset[9] }}");
         var earnrate = profit / askasset * 100;
@@ -278,9 +277,17 @@
     });
 
     $("#benerate").change(function (){
-        calprofit();
+        ratechange();
     });
 
+    function ratechange(){
+        let asksum = $("#asksum").text();
+        asksum = numberNoneCommas(asksum);
+        var chrate = $("#benerate option:selected").val();
+        var apprate = chrate/100;
+        var profit = asksum * apprate;
+        $("#askprofit").html(numberWithCommas(Math.round(profit)));
+    }
 
     $("#trcoinselector").change(function(){
         var selctcoin = $("#trcoinselector").val();
