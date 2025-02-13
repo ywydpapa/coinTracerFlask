@@ -336,9 +336,9 @@ def setupmybid():
         slot = request.form.get('tabindex')
         initprice = request.form.get('initprice')
         initprice = initprice.replace(',', '')
-        bidrate = 1.00
         initprice = initprice.replace(',', '')
-        askrate = 0.5
+        askrate = request.form.get('lcrate') #손절률 추가
+        lcchk = request.form.get('lcchk')
         tradeset = request.form.get('tradeset')
         tradeset = tradeset.split(',')[0]
         bidsteps = request.form.get('tradeset')
@@ -357,6 +357,10 @@ def setupmybid():
             dyn = 'Y'
         else:
             dyn = 'N'
+        if lcchk == 'on':
+            bidrate = 1.0
+        else:
+            bidrate = 0.0
         if limityn == 'on':
             limityn = 'Y'
         else:
