@@ -386,9 +386,9 @@ def editmybid2():
         bidsetps = request.form.get('bidsteps')
         initprice = request.form.get('initprice')
         initprice = initprice.replace(',', '')
-        bidrate = 1.00
+        bidrate = request.form.get('lcchk')
         initprice = initprice.replace(',', '')
-        askrate = 0.5
+        askrate = request.form.get('lcrate')
         tradeset = request.form.get('tradeset')
         tradeset = tradeset.split(',')[0]
         coinn = request.form.get('coinn')
@@ -403,6 +403,10 @@ def editmybid2():
             dyn = 'Y'
         else:
             dyn = 'N'
+        if bidrate == 'on':
+            bidrate = 1.0
+        else:
+            bidrate = 0.0
         if coinn is not None:
             editbidsetup(setno, uno, skey, initprice, bidsetps, bidrate, askrate, coinn, svrno, tradeset, hno, dyn, limityn, limitamt, slot)
     return redirect('/trade?uno=' + uno + '&skey=' + skey + '&tabindex=' + slot)
