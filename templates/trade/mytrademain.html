@@ -200,7 +200,7 @@
                         </div>
                                 </div>
                                 <div class="card-footer">
-                                    현재 가격 {{ cprice1 }}
+                                    현재 가격: {{ cprice1 | currency }}
                                     구매가 대비 비율 {{ bsrate1 }}%
                                 </div>
                             </div>
@@ -218,7 +218,7 @@
                         </div>
                                 </div>
                                 <div class="card-footer">
-                                    현재 가격 {{ cprice2 }}
+                                    현재 가격 {{ cprice2 | currency }}
                                     구매가 대비 비율 {{ bsrate2 }}%
                                 </div>
                             </div>
@@ -236,7 +236,7 @@
                         </div>
                                 </div>
                                 <div class="card-footer">
-                                    현재 가격 {{ cprice3 }}
+                                    현재 가격 {{ cprice3 | currency }}
                                     구매가 대비 비율 {{ bsrate3 }}%
                                 </div>
                             </div>
@@ -539,6 +539,9 @@
             yAxes: [{
                 display: true,
                 ticks: {
+                    callback: function(value) {
+                        return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(value);
+                    }
                 },
                 scaleLabel: {
                     display: true,
@@ -601,6 +604,9 @@
             yAxes: [{
                 display: true,
                 ticks: {
+                    callback: function(value) {
+                        return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(value);
+                    }
                 },
                 scaleLabel: {
                     display: true,
@@ -664,6 +670,9 @@
             yAxes: [{
                 display: true,
                 ticks: {
+                    callback: function(value) {
+                        return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(value);
+                    }
                 },
                 scaleLabel: {
                     display: true,

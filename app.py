@@ -27,6 +27,12 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 Bootstrap(app)
 
+def format_currency(value):
+    if isinstance(value, (int, float)):
+        return "₩{:,.0f}".format(value)
+    return value
+
+app.jinja_env.filters['currency'] = format_currency
 
 @app.route('/')
 def home():  # put application's code here

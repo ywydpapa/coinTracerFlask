@@ -172,6 +172,9 @@
             yAxes: [{
                 display: true,
                 ticks: {
+                    callback: function(value) {
+                        return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(value);
+                    }
                 },
                 scaleLabel: {
                     display: true,
