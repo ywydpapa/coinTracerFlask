@@ -383,7 +383,6 @@ def editmybid2():
         setno = request.form.get('sno')
         uno = request.form.get('userno')
         slot = request.form.get('tabindex')
-        bidsetps = request.form.get('bidsteps')
         initprice = request.form.get('initprice')
         initprice = initprice.replace(',', '')
         bidrate = request.form.get('lcchk')
@@ -391,6 +390,8 @@ def editmybid2():
         askrate = request.form.get('lcrate')
         tradeset = request.form.get('tradeset')
         tradeset = tradeset.split(',')[0]
+        bidsetps = request.form.get('tradeset')
+        bidsetps = bidsetps.split(',')[1]
         coinn = request.form.get('coinn')
         skey = request.form.get('skey')
         svrno = request.form.get('svrno')

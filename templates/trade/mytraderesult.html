@@ -255,6 +255,9 @@
                     var sett = parseFloat(mpr) * parseFloat(exvol) - parseFloat(fee);
                 }
             }
+            if (!sett){
+                sett = 0;
+            }
             sett = Math.round(sett);
             $Carr[i].innerText = numberWithCommas(sett);
         }
