@@ -1211,7 +1211,7 @@ def sellc(uno):
     db58 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur58 = db58.cursor()
     try:
-        sql = "select lcCoinn, round(lcGap*100,4) lcGap, regDate from lcLog where userNo = %s"
+        sql = "select lcCoinn, round(lcGap*100,4) lcGap, regDate from lcLog where userNo = %s order by regDate DESC"
         cur58.execute(sql,uno)
         item = cur58.fetchall()
         return item
