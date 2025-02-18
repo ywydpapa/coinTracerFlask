@@ -27,6 +27,7 @@
                                 <thead style="text-align: center">
                                     <th>코인명</th>
                                     <th>손절율</th>
+                                    <th>손절액</th>
                                     <th>현재가</th>
                                 </thead>
                                     <tbody>
@@ -34,6 +35,7 @@
                                         <tr>
                                             <td style="text-align: center" >{{ item[0] }}</td>
                                             <td style="text-align: right" >{{ item[1] }} %</td>
+                                            <td style="text-align: right" >{{ item[3] | currency }}</td>
                                             <td style="text-align: center" >{{ item[2] }}</td>
                                         </tr>
                                     {% endfor %}
