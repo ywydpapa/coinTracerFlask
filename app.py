@@ -658,7 +658,7 @@ def updatemyuser():
 def sellcoin():
     pla = request.get_data().decode('utf-8').split(',')
     uno = pla[0]
-    coinn = "KRW-"+pla[1]
+    coinn = pla[1]
     rate = pla[2]
     sellmycoinpercent(uno, coinn, rate)
     return "YES"
