@@ -9,7 +9,7 @@ from comm.dbconn import (selectUsers, setKeys, checkwallet, tradehistory, hotcoi
                          setmypasswd, updateuserdetail, updatetrbidadmin, settingonoff, hotcoinlist, sethotcoin,
                          selectboardlist, boarddetail, resethotcoins, setLog, \
                          boardupdate, boardnewwrite, setholdreset, getmessage, cancelorder, gettop20, tradehistorys,
-                         servicestatus,
+                         servicestatus,sellc,
                          tradelist, readmsg, gettradelog, tradedcoins, modifyLog, insertLog, getmytrlog, getmyincomes,
                          checkwalletremains,
                          mysettinglist, getsetupmax, erasebid, getsetups, setonoffs, editbidsetup, getlicence,
@@ -747,6 +747,13 @@ def updateset():
 def boardlist():
     items = selectboardlist(1)
     return render_template('./board/boardlist.html', items = items)
+
+
+@app.route('/lclist')
+def lclist():
+    uno = request.args.get('uno')
+    items = sellc(uno)
+    return render_template('./trade/mylclist.html', items = items)
 
 
 @app.route('/noticelist')

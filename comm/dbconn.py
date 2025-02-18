@@ -1204,3 +1204,19 @@ def incomesum(uno):
     finally:
         cur57.close()
         db57.close()
+
+
+def sellc(uno):
+    global item
+    db58 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
+    cur58 = db58.cursor()
+    try:
+        sql = "select lcCoinn, round(lcGap*100,4) lcGap, regDate from lcLog where userNo = %s"
+        cur58.execute(sql,uno)
+        item = cur58.fetchall()
+        return item
+    except Exception as e:
+        print("손절 현황 조회 에러", e)
+    finally:
+        cur58.close()
+        db58.close()
