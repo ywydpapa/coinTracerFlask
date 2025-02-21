@@ -489,8 +489,59 @@ def setupmybidadmin():
         m7 = request.form.get('max07')
         m8 = request.form.get('max08')
         m9 = request.form.get('max09')
+        n0 = request.form.get('net00')
+        if n0 == 'on':
+            n0 = 'Y'
+        else:
+            n0 = 'N'
+        n1 = request.form.get('net01')
+        if n1 == 'on':
+            n1 = 'Y'
+        else:
+            n1 = 'N'
+        n2 = request.form.get('net02')
+        if n2 == 'on':
+            n2 = 'Y'
+        else:
+            n2 = 'N'
+        n3 = request.form.get('net03')
+        if n3 == 'on':
+            n3 = 'Y'
+        else:
+            n3 = 'N'
+        n4 = request.form.get('net04')
+        if n4 == 'on':
+            n4 = 'Y'
+        else:
+            n4 = 'N'
+        n5 = request.form.get('net05')
+        if n5 == 'on':
+            n5 = 'Y'
+        else:
+            n5 = 'N'
+        n6 = request.form.get('net06')
+        if n6 == 'on':
+            n6 = 'Y'
+        else:
+            n6 = 'N'
+        n7 = request.form.get('net07')
+        if n7 == 'on':
+            n7 = 'Y'
+        else:
+            n7 = 'N'
+        n8 = request.form.get('net08')
+        if n8 == 'on':
+            n8 = 'Y'
+        else:
+            n8 = 'N'
+        n9 = request.form.get('net09')
+        if n9 == 'on':
+            n9 = 'Y'
+        else:
+            n9 = 'N'
         setuptrbidadmin(uno, skey, settitle, bidsteps, g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, r0, r1, r2, r3, r4, r5,
-                        r6, r7, r8, r9, b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, m0, m1, m2, m3, m4, m5, m6, m7, m8, m9)
+                        r6, r7, r8, r9, b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, m0, m1, m2, m3, m4, m5, m6, m7, m8, m9,
+                        n0, n1, n2, n3, n4, n5, n6, n7, n8, n9)
     return redirect('/setlist')
 
 
@@ -761,9 +812,59 @@ def updateset():
     m7 = request.form.get('max07')
     m8 = request.form.get('max08')
     m9 = request.form.get('max09')
+    n0 = request.form.get('net00')
+    if n0 == 'on':
+        n0 = 'Y'
+    else:
+        n0 = 'N'
+    n1 = request.form.get('net01')
+    if n1 == 'on':
+        n1 = 'Y'
+    else:
+        n1 = 'N'
+    n2 = request.form.get('net02')
+    if n2 == 'on':
+        n2 = 'Y'
+    else:
+        n2 = 'N'
+    n3 = request.form.get('net03')
+    if n3 == 'on':
+        n3 = 'Y'
+    else:
+        n3 = 'N'
+    n4 = request.form.get('net04')
+    if n4 == 'on':
+        n4 = 'Y'
+    else:
+        n4 = 'N'
+    n5 = request.form.get('net05')
+    if n5 == 'on':
+        n5 = 'Y'
+    else:
+        n5 = 'N'
+    n6 = request.form.get('net06')
+    if n6 == 'on':
+        n6 = 'Y'
+    else:
+        n6 = 'N'
+    n7 = request.form.get('net07')
+    if n7 == 'on':
+        n7 = 'Y'
+    else:
+        n7 = 'N'
+    n8 = request.form.get('net08')
+    if n8 == 'on':
+        n8 = 'Y'
+    else:
+        n8 = 'N'
+    n9 = request.form.get('net09')
+    if n9 == 'on':
+        n9 = 'Y'
+    else:
+        n9 = 'N'
     setno = request.form.get('setno')
     updatetrbidadmin(uno, skey, settitle, bidsteps, g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, r0, r1, r2, r3, r4, r5, r6,
-                     r7, r8, r9, b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, setno)
+                     r7, r8, r9, b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, m0, m1, m2, m3, m4, m5, m6, m7, m8, m9,n0, n1, n2, n3, n4, n5, n6, n7, n8, n9, setno)
     rows = selectsets()
     return render_template('./admin/setlistn.html', rows=rows)
 

@@ -155,9 +155,12 @@
                             <tr>
                                 <td style="text-align: center"><h5>2차 매수 구간 </h5></td>
                                 <td class="trval" style="text-align: right">
-                                    <input id="bid01" name="bid01" style="text-align: right"
+                                <div class="d-flex gap-2">
+                                    <label for="net01">#</label><input type="checkbox" id="net01" name="net01" {% if rows[44]=='Y' %}checked{% endif %}>
+                                                                    <input id="bid01" name="bid01" style="text-align: right"
                                            class="form-control bidinput" type="number" min="0" max="" step="10000"
                                            value="{{ rows[24] }}">
+                                </div>
                                 </td>
                                 <td style="text-align: right" class="trsum">
                                     <input id="max01" name="max01" style="text-align: right"
@@ -178,9 +181,12 @@
                             <tr>
                                 <td style="text-align: center"><h5>3차 매수 구간 </h5></td>
                                 <td class="trval" style="text-align: right">
+                                <div class="d-flex gap-2">
+                                    <label for="net02">#</label><input type="checkbox" id="net02" name="net02" {% if rows[45]=='Y' %}checked{% endif %}>
                                     <input id="bid02" name="bid02" style="text-align: right"
                                            class="form-control bidinput" type="number" min="0" max="" step="10000"
                                            value="{{ rows[25] }}">
+                                </div>
                                 </td>
                                 <td style="text-align: right" class="trsum">
                                     <input id="max02" name="max02" style="text-align: right"
@@ -201,9 +207,12 @@
                             <tr>
                                 <td style="text-align: center"><h5>4차 매수 구간 </h5></td>
                                 <td class="trval" style="text-align: right">
+                                <div class="d-flex gap-2">
+                                    <label for="net03">#</label><input type="checkbox" id="net03" name="net03" {% if rows[46]=='Y' %}checked{% endif %}>
                                     <input id="bid03" name="bid03" style="text-align: right"
                                            class="form-control bidinput" type="number" min="0" max="" step="10000"
                                            value="{{ rows[26] }}">
+                                </div>
                                 </td>
                                 <td style="text-align: right" class="trsum">
                                     <input id="max03" name="max03" style="text-align: right"
@@ -224,9 +233,12 @@
                             <tr>
                                 <td style="text-align: center"><h5>5차 매수 구간 </h5></td>
                                 <td class="trval" style="text-align: right">
+                                <div class="d-flex gap-2">
+                                    <label for="net04">#</label><input type="checkbox" id="net04" name="net04" {% if rows[47]=='Y' %}checked{% endif %}>
                                     <input id="bid04" name="bid04" style="text-align: right"
                                            class="form-control bidinput" type="number" min="0" max="" step="10000"
                                            value="{{ rows[27] }}">
+                                </div>
                                 </td>
                                 <td style="text-align: right" class="trsum">
                                     <input id="max04" name="max04" style="text-align: right"
@@ -247,9 +259,12 @@
                             <tr>
                                 <td style="text-align: center"><h5>6차 매수 구간 </h5></td>
                                 <td class="trval" style="text-align: right">
+                                <div class="d-flex gap-2">
+                                    <label for="net05">#</label><input type="checkbox" id="net05" name="net05"{% if rows[48]=='Y' %}checked{% endif %}>
                                     <input id="bid05" name="bid05" style="text-align: right"
                                            class="form-control bidinput" type="number" min="0" max="" step="10000"
                                            value="{{ rows[28] }}">
+                                </div>
                                 </td>
                                 <td style="text-align: right" class="trsum">
                                     <input id="max05" name="max05" style="text-align: right"
@@ -270,9 +285,12 @@
                             <tr>
                                 <td style="text-align: center"><h5>7차 매수 구간 </h5></td>
                                 <td class="trval" style="text-align: right">
+                                <div class="d-flex gap-2">
+                                    <label for="net06">#</label><input type="checkbox" id="net06" name="net06"{% if rows[49]=='Y' %}checked{% endif %}>
                                     <input id="bid06" name="bid06" style="text-align: right"
                                            class="form-control bidinput" type="number" min="0" max="" step="10000"
                                            value="{{ rows[29] }}">
+                                </div>
                                 </td>
                                 <td style="text-align: right" class="trsum">
                                     <input id="max06" name="max06" style="text-align: right"
@@ -293,9 +311,12 @@
                             <tr>
                                 <td style="text-align: center"><h5>8차 매수 구간 </h5></td>
                                 <td class="trval" style="text-align: right">
+                                <div class="d-flex gap-2">
+                                    <label for="net07">#</label><input type="checkbox" id="net07" name="net07"{% if rows[50]=='Y' %}checked{% endif %}>
                                     <input id="bid07" name="bid07" style="text-align: right"
                                            class="form-control bidinput" type="number" min="0" max="" step="10000"
                                            value="{{ rows[30] }}">
+                                </div>
                                 </td>
                                 <td style="text-align: right" class="trsum">
                                     <input id="max07" name="max07" style="text-align: right"
@@ -316,9 +337,12 @@
                             <tr>
                                 <td style="text-align: center"><h5>9차 매수 구간 </h5></td>
                                 <td class="trval" style="text-align: right">
+                                <div class="d-flex gap-2">
+                                    <label for="net08">#</label><input type="checkbox" id="net08" name="net08"{% if rows[51]=='Y' %}checked{% endif %}>
                                     <input id="bid08" name="bid08" style="text-align: right"
                                            class="form-control bidinput" type="number" min="0" max="" step="10000"
                                            value="{{ rows[31] }}">
+                                </div>
                                 </td>
                                 <td style="text-align: right" class="trsum">
                                     <input id="max08" name="max08" style="text-align: right"
@@ -339,9 +363,12 @@
                             <tr>
                                 <td style="text-align: center"><h5>10차 매수 구간 </h5></td>
                                 <td class="trval" style="text-align: right">
+                                <div class="d-flex gap-2">
+                                    <label for="net09">#</label><input type="checkbox" id="net09" name="net09"{% if rows[52]=='Y' %}checked{% endif %}>
                                     <input id="bid09" name="bid09" style="text-align: right"
                                            class="form-control bidinput" type="number" min="0" max="" step="10000"
                                            value="{{ rows[32] }}">
+                                </div>
                                 </td>
                                 <td style="text-align: right" class="trsum">
                                     <input id="max09" name="max09" style="text-align: right"

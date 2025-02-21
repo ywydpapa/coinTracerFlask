@@ -5,7 +5,6 @@ import dotenv
 import pymysql
 import pyupbit
 
-
 dotenv.load_dotenv()
 hostenv = os.getenv("host")
 userenv = os.getenv("user")
@@ -44,7 +43,7 @@ def selectUsers(uid, upw):
         row = cur1.fetchone()
         print(row)
         if row is not None:
-            setkey = random.randint(100000,999999)
+            setkey = random.randint(100000, 999999)
     except Exception as e:
         print('접속오류', e)
     finally:
@@ -77,7 +76,7 @@ def detailuser(uno):
     row = None
     try:
         sql = "SELECT * FROM traceUser WHERE userNo = %s and attrib NOT LIKE %s"
-        cur3.execute(sql, (uno,str("%XXX")))
+        cur3.execute(sql, (uno, str("%XXX")))
         rows = cur3.fetchone()
     except Exception as e:
         print('접속오류', e)
@@ -101,7 +100,7 @@ def setKeys(uno, setkey):
         db.close()
 
 
-def check_srv(coinn,perc):
+def check_srv(coinn, perc):
     values = pyupbit.get_ohlcv(coinn, interval="day", count=30)
     volumes = values['volume']
     if len(volumes) < 21:
@@ -126,14 +125,14 @@ def checkwallet(uno, setkey):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur5 = db.cursor()
     sql = "SELECT apiKey1, apiKey2 FROM traceUser WHERE setupKey=%s AND userNo=%s and attrib not like %s"
-    cur5.execute(sql,(setkey, uno, '%XXX'))
+    cur5.execute(sql, (setkey, uno, '%XXX'))
     keys = cur5.fetchall()
     if len(keys) == 0:
         print("No available Keys !!")
     else:
         key1 = keys[0][0]
         key2 = keys[0][1]
-        upbit = pyupbit.Upbit(key1,key2)
+        upbit = pyupbit.Upbit(key1, key2)
         walletitems = upbit.get_balances()
     cur5.close()
     db.close()
@@ -146,14 +145,14 @@ def checkwalletwon(uno, setkey):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur6 = db.cursor()
     sql = "SELECT apiKey1, apiKey2 FROM traceUser WHERE setupKey=%s AND userNo=%s and attrib not like %s"
-    cur6.execute(sql,(setkey, uno, '%XXX'))
+    cur6.execute(sql, (setkey, uno, '%XXX'))
     keys = cur6.fetchall()
     if len(keys) == 0:
         print("No available Keys !!")
     else:
         key1 = keys[0][0]
         key2 = keys[0][1]
-        upbit = pyupbit.Upbit(key1,key2)
+        upbit = pyupbit.Upbit(key1, key2)
         walletwon = round(upbit.get_balance("KRW"))
     cur6.close()
     db.close()
@@ -165,19 +164,19 @@ def tradehistory(uno, setkey):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur7 = db.cursor()
     sql = "SELECT bidCoin from traceSetup where userNo = %s and attrib not like %s "
-    cur7.execute(sql,(uno, '%XXXUP'))
+    cur7.execute(sql, (uno, '%XXXUP'))
     data = cur7.fetchone()
     coinn = data[0]
     sql2 = "SELECT apiKey1, apiKey2 FROM traceUser WHERE setupKey=%s AND userNo=%s and attrib not like %s"
-    cur7.execute(sql2,(setkey, uno, '%XXX'))
+    cur7.execute(sql2, (setkey, uno, '%XXX'))
     keys = cur7.fetchone()
     if len(keys) == 0:
         print("No available Keys !!")
     else:
         key1 = keys[0]
         key2 = keys[1]
-        upbit = pyupbit.Upbit(key1,key2)
-        tradelist = upbit.get_order(coinn,state='done')
+        upbit = pyupbit.Upbit(key1, key2)
+        tradelist = upbit.get_order(coinn, state='done')
     cur7.close()
     db.close()
     return tradelist
@@ -187,7 +186,7 @@ def checkkey(uno, setkey):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur8 = db.cursor()
     sql = "SELECT * from traceUser WHERE setupKey=%s AND userNo=%s and attrib not like %s"
-    cur8.execute(sql,(setkey, uno, '%XXX'))
+    cur8.execute(sql, (setkey, uno, '%XXX'))
     result = cur8.fetchall()
     cur8.close()
     db.close()
@@ -202,7 +201,7 @@ def erasebid(uno, setkey, tabindex):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur9 = db.cursor()
     sql = "SELECT * from traceUser WHERE setupKey=%s AND userNo=%s and attrib not like %s"
-    cur9.execute(sql,(setkey, uno, '%XXX'))
+    cur9.execute(sql, (setkey, uno, '%XXX'))
     result = cur9.fetchall()
     if len(result) == 0:
         print("No match Keys !!")
@@ -211,79 +210,92 @@ def erasebid(uno, setkey, tabindex):
         return False
     else:
         sql2 = "update traceSetup set attrib=%s where userNo=%s and slot = %s"
-        cur9.execute(sql2,("XXXUPXXXUPXXXUP", uno, tabindex))
+        cur9.execute(sql2, ("XXXUPXXXUPXXXUP", uno, tabindex))
         db.commit()
         cur9.close()
         db.close()
         return True
 
 
-
-def setupbid(uno, setkey, initbid, bidstep, bidrate, askrate, coinn, svrno, tradeset, holdNo, doubleYN, limitamt, limityn, slot):
+def setupbid(uno, setkey, initbid, bidstep, bidrate, askrate, coinn, svrno, tradeset, holdNo, doubleYN, limitamt,
+             limityn, slot):
     global cur0, db
     chkkey = checkkey(uno, setkey)
-    nowt = datetime.now()+ timedelta(minutes=15)
+    nowt = datetime.now() + timedelta(minutes=15)
     if chkkey == True:
         try:
             db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
             cur0 = db.cursor()
             sql = "insert into traceSetup (userNo, initAsset, bidInterval, bidRate, askrate, bidCoin, custKey ,serverNo, holdNo, doubleYN, limitAmt, limitYN, slot, regDate) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, now())"
-            cur0.execute(sql, (uno, initbid, bidstep, bidrate, askrate, coinn, tradeset, svrno, holdNo, doubleYN, limitamt, limityn, slot))
+            cur0.execute(sql, (
+            uno, initbid, bidstep, bidrate, askrate, coinn, tradeset, svrno, holdNo, doubleYN, limitamt, limityn, slot))
             db.commit()
         except Exception as e:
             print('접속오류', e)
         finally:
             cur0.close()
             db.close()
-            tradelog(uno,'HOLD',coinn,nowt)
+            tradelog(uno, 'HOLD', coinn, nowt)
             tradelog(uno, 'BID', coinn, nowt)
             return True
     else:
         return False
 
 
-def editbidsetup(sno, uno, setkey, initbid, bidstep, bidrate, askrate, coinn, svrno, tradeset, holdNo, doubleYN, limitYN, limitAmt, tabindex):
+def editbidsetup(sno, uno, setkey, initbid, bidstep, bidrate, askrate, coinn, svrno, tradeset, holdNo, doubleYN,
+                 limitYN, limitAmt, tabindex):
     global cur0, db
     chkkey = checkkey(uno, setkey)
-    nowt = datetime.now()+ timedelta(minutes=15)
+    nowt = datetime.now() + timedelta(minutes=15)
     if chkkey == True:
         try:
             db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
             cur0 = db.cursor()
             sqlp = "update traceSetup set attrib=%s where setupNo=%s"
-            cur0.execute(sqlp,("XXXUPXXXUPXXXUP", sno))
+            cur0.execute(sqlp, ("XXXUPXXXUPXXXUP", sno))
             db.commit()
             sql = "insert into traceSetup (userNo, initAsset, bidInterval, bidRate, askrate, bidCoin, custKey ,serverNo, holdNo, doubleYN, limitYN, limitAmt, slot ,regDate) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s ,now())"
-            cur0.execute(sql, (uno, initbid, bidstep, bidrate, askrate, coinn, tradeset, svrno, holdNo, doubleYN, limitYN, limitAmt, tabindex))
+            cur0.execute(sql, (
+            uno, initbid, bidstep, bidrate, askrate, coinn, tradeset, svrno, holdNo, doubleYN, limitYN, limitAmt,
+            tabindex))
             db.commit()
         except Exception as e:
             print('접속오류', e)
         finally:
             cur0.close()
             db.close()
-            tradelog(uno,'HOLD',coinn,nowt)
+            tradelog(uno, 'HOLD', coinn, nowt)
             tradelog(uno, 'BID', coinn, nowt)
             return True
     else:
         return True
 
 
-def setuptrbidadmin(uno, setkey, settitle, bidstep, stp0, stp1, stp2, stp3, stp4, stp5, stp6, stp7, stp8, stp9, int0, int1, int2, int3, int4, int5, int6, int7, int8, int9,bid0,bid1,bid2,bid3,bid4,bid5,bid6,bid7,bid8,bid9,max0,max1,max2,max3,max4,max5,max6,max7,max8,max9):
+def setuptrbidadmin(uno, setkey, settitle, bidstep, stp0, stp1, stp2, stp3, stp4, stp5, stp6, stp7, stp8, stp9, int0,
+                    int1, int2, int3, int4, int5, int6, int7, int8, int9, bid0, bid1, bid2, bid3, bid4, bid5, bid6,
+                    bid7, bid8, bid9, max0, max1, max2, max3, max4, max5, max6, max7, max8, max9, net0, net1, net2,
+                    net3, net4, net5, net6, net7, net8, net9):
     global cur11, db
     chkkey = checkkey(uno, setkey)
     if chkkey == True:
         try:
             db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
             cur11 = db.cursor()
-            sql = ("insert into traceSets (setTitle, setInterval, step0, step1, step2, step3, step4, step5, step6, step7, step8, step9,"
-                   " inter0, inter1, inter2, inter3, inter4, inter5, inter6, inter7, inter8, inter9,"
-                   "bid0,bid1,bid2,bid3,bid4,bid5,bid6,bid7,bid8,bid9,"
-                   "max0,max1,max2,max3,max4,max5,max6,max7,max8,max9, regdate) "
-                   "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,"
-                   " %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,"
-                   " %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,"
-                   " %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, now())")
-            cur11.execute(sql, (settitle, bidstep, stp0, stp1, stp2, stp3, stp4, stp5, stp6, stp7, stp8, stp9, int0, int1, int2, int3, int4, int5, int6, int7, int8,int9,bid0,bid1,bid2,bid3,bid4,bid5,bid6,bid7,bid8,bid9,max0,max1,max2,max3,max4,max5,max6,max7,max8,max9))
+            sql = (
+                "insert into traceSets (setTitle, setInterval, step0, step1, step2, step3, step4, step5, step6, step7, step8, step9,"
+                " inter0, inter1, inter2, inter3, inter4, inter5, inter6, inter7, inter8, inter9,"
+                "bid0,bid1,bid2,bid3,bid4,bid5,bid6,bid7,bid8,bid9,"
+                "max0,max1,max2,max3,max4,max5,max6,max7,max8,max9,"
+                "net0,net1,net2,net3,net4,net5,net6,net7,net8,net9, regdate) "
+                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,"
+                " %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,"
+                " %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,"
+                " %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,"
+                " %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, now())")
+            cur11.execute(sql, (
+            settitle, bidstep, stp0, stp1, stp2, stp3, stp4, stp5, stp6, stp7, stp8, stp9, int0, int1, int2, int3, int4,
+            int5, int6, int7, int8, int9, bid0, bid1, bid2, bid3, bid4, bid5, bid6, bid7, bid8, bid9, max0, max1, max2,
+            max3, max4, max5, max6, max7, max8, max9, net0, net1, net2, net3, net4, net5, net6, net7, net8, net9))
             db.commit()
         except Exception as e:
             print('접속오류', e)
@@ -311,7 +323,7 @@ def getsetup(uno):
         db.close()
 
 
-def getsetupmax(uno,sdate):
+def getsetupmax(uno, sdate):
     global cur12, db
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur12 = db.cursor()
@@ -327,7 +339,7 @@ def getsetupmax(uno,sdate):
         db.close()
 
 
-def getsetups(uno,slotno):
+def getsetups(uno, slotno):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur13 = db.cursor()
     try:
@@ -351,7 +363,7 @@ def getlicence(uno):
     cur13 = db.cursor()
     try:
         sql = "select tradeCnt from traceUser where userNo=%s and attrib not like %s"
-        cur13.execute(sql, (uno,'%XXXUP'))
+        cur13.execute(sql, (uno, '%XXXUP'))
         data = cur13.fetchone()
         return data
     except Exception as e:
@@ -361,12 +373,12 @@ def getlicence(uno):
         db.close()
 
 
-def setonoff(uno,yesno):
+def setonoff(uno, yesno):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur14 = db.cursor()
     try:
         sql = "UPDATE traceSetup SET activeYN = %s where userNo=%s AND attrib not like %s"
-        cur14.execute(sql, (yesno, uno,'%XXXUP'))
+        cur14.execute(sql, (yesno, uno, '%XXXUP'))
         db.commit()
     except Exception as e:
         print('접속오류', e)
@@ -375,12 +387,12 @@ def setonoff(uno,yesno):
         db.close()
 
 
-def setallonoff(uno,yesno):
+def setallonoff(uno, yesno):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur14 = db.cursor()
     try:
         sql = "UPDATE traceSetup SET activeYN = %s where userNo=%s AND attrib not like %s"
-        cur14.execute(sql, (yesno, uno,'%XXXUP'))
+        cur14.execute(sql, (yesno, uno, '%XXXUP'))
         db.commit()
     except Exception as e:
         print('접속오류', e)
@@ -389,12 +401,12 @@ def setallonoff(uno,yesno):
         db.close()
 
 
-def setonoffs(setno,yesno):
+def setonoffs(setno, yesno):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur14 = db.cursor()
     try:
         sql = "UPDATE traceSetup SET activeYN = %s where setupNo=%s AND attrib not like %s"
-        cur14.execute(sql, (yesno, setno,'%XXXUP'))
+        cur14.execute(sql, (yesno, setno, '%XXXUP'))
         db.commit()
     except Exception as e:
         print('접속오류', e)
@@ -403,12 +415,12 @@ def setonoffs(setno,yesno):
         db.close()
 
 
-def setholdreset(uno,hr):
+def setholdreset(uno, hr):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur14_1 = db.cursor()
     try:
         sql = "UPDATE traceSetup SET holdYN = %s where userNo=%s AND attrib not like %s"
-        cur14_1.execute(sql, (hr, uno,'%XXXUP'))
+        cur14_1.execute(sql, (hr, uno, '%XXXUP'))
         db.commit()
     except Exception as e:
         print('접속오류', e)
@@ -424,11 +436,11 @@ def getseton():
     print("GetKey !!")
     try:
         sql = "SELECT userNo from traceSetup where attrib not like %s"
-        cur15.execute(sql,'%XXXUP')
+        cur15.execute(sql, '%XXXUP')
         data = cur15.fetchall()
         return data
     except Exception as e:
-        print('접속오류',e)
+        print('접속오류', e)
     finally:
         cur15.close()
         db.close()
@@ -440,11 +452,11 @@ def getsetonsvr(svrNo):
     data = []
     try:
         sql = "SELECT userNo from traceSetup where attrib not like %s and serverNo=%s"
-        cur16.execute(sql,('%XXXUP', svrNo))
+        cur16.execute(sql, ('%XXXUP', svrNo))
         data = cur16.fetchall()
         return data
     except Exception as e:
-        print('접속오류',e)
+        print('접속오류', e)
     finally:
         cur16.close()
         db.close()
@@ -455,11 +467,11 @@ def getupbitkey(uno):
     cur17 = db.cursor()
     try:
         sql = "SELECT apiKey1, apiKey2 FROM traceUser WHERE userNo=%s and attrib not like %s"
-        cur17.execute(sql, (uno,'%XXXUP'))
+        cur17.execute(sql, (uno, '%XXXUP'))
         data = cur17.fetchone()
         return data
     except Exception as e:
-        print('접속오류',e)
+        print('접속오류', e)
     finally:
         cur17.close()
         db.close()
@@ -486,10 +498,10 @@ def getorderlist(uno, slotno):
     return orders
 
 
-def sellmycoinpercent(uno,coinn, rate):
+def sellmycoinpercent(uno, coinn, rate):
     keys = getupbitkey(uno)
-    coink = "KRW-"+ coinn
-    upbit = pyupbit.Upbit(keys[0],keys[1])
+    coink = "KRW-" + coinn
+    upbit = pyupbit.Upbit(keys[0], keys[1])
     walt = upbit.get_balances()
     crp = pyupbit.get_current_price(coink)
     for coin in walt:
@@ -497,8 +509,8 @@ def sellmycoinpercent(uno,coinn, rate):
             if int(rate) == 0:
                 balance = round(10000 / float(crp), 8)
             else:
-                balance = float(coin['balance'])/int(rate)
-            result = upbit.sell_market_order(coink,balance)
+                balance = float(coin['balance']) / int(rate)
+            result = upbit.sell_market_order(coink, balance)
             try:
                 if result["error"]["name"] == 'under_min_total_market_ask':
                     buy5000 = upbit.buy_market_order(coinn, 5000)
@@ -507,7 +519,6 @@ def sellmycoinpercent(uno,coinn, rate):
                 pass
         else:
             pass
-
 
 
 def selectsets():
@@ -583,7 +594,7 @@ def updateuserdetail(uno, key1, key2, svrno):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur23 = db.cursor()
     try:
-        sql= "UPDATE traceUser SET apiKey1 = %s, apiKey2 = %s, serverNo = %s where userNo = %s"
+        sql = "UPDATE traceUser SET apiKey1 = %s, apiKey2 = %s, serverNo = %s where userNo = %s"
         cur23.execute(sql, (key1, key2, svrno, uno))
         db.commit()
     except Exception as e:
@@ -593,17 +604,23 @@ def updateuserdetail(uno, key1, key2, svrno):
         db.close()
 
 
-def updatetrbidadmin(uno, setkey, settitle, bidstep, stp0, stp1, stp2, stp3, stp4, stp5, stp6, stp7, stp8, stp9, int0, int1, int2, int3, int4, int5, int6, int7, int8, int9, bid0,bid1,bid2,bid3,bid4,bid5,bid6,bid7,bid8,bid9,max0,max1,max2,max3,max4,max5,max6,max7,max8,max9, setsno):
+def updatetrbidadmin(uno, setkey, settitle, bidstep, stp0, stp1, stp2, stp3, stp4, stp5, stp6, stp7, stp8, stp9, int0,
+                     int1, int2, int3, int4, int5, int6, int7, int8, int9, bid0, bid1, bid2, bid3, bid4, bid5, bid6,
+                     bid7, bid8, bid9, max0, max1, max2, max3, max4, max5, max6, max7, max8, max9, net0, net1, net2, net3, net4, net5, net6, net7, net8, net9,  setsno):
     chkkey = checkkey(uno, setkey)
     if chkkey == True:
         db24 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
         cur24 = db24.cursor()
         try:
-            sql = ("UPDATE traceSets set setTitle = %s, setInterval = %s, step0 = %s, step1 = %s, step2 = %s, step3 = %s, step4 = %s, step5 = %s, step6 = %s, step7 = %s, step8 = %s, step9 = %s, "
-                   "inter0 = %s, inter1 = %s, inter2 = %s, inter3 = %s, inter4 = %s, inter5 = %s, inter6 = %s, inter7 = %s, inter8 = %s, inter9 = %s, "
-                   "bid0 = %s,bid1 = %s,bid2 = %s,bid3 = %s,bid4 = %s,bid5 = %s,bid6 = %s,bid7 = %s,bid8 = %s,bid9 = %s,max0=%s,max1=%s,max2=%s,max3=%s,max4=%s,max5=%s,max6=%s,max7=%s,max8=%s,max9=%s,"
-                   "modDate = now() where setNo = %s")
-            cur24.execute(sql, (settitle, bidstep, stp0, stp1, stp2, stp3, stp4, stp5, stp6, stp7, stp8, stp9, int0, int1, int2, int3, int4, int5, int6, int7, int8, int9,bid0,bid1,bid2,bid3,bid4,bid5,bid6,bid7,bid8,bid9,max0,max1,max2,max3,max4,max5,max6,max7,max8,max9, setsno))
+            sql = (
+                "UPDATE traceSets set setTitle = %s, setInterval = %s, step0 = %s, step1 = %s, step2 = %s, step3 = %s, step4 = %s, step5 = %s, step6 = %s, step7 = %s, step8 = %s, step9 = %s, "
+                "inter0 = %s, inter1 = %s, inter2 = %s, inter3 = %s, inter4 = %s, inter5 = %s, inter6 = %s, inter7 = %s, inter8 = %s, inter9 = %s, "
+                "bid0 = %s,bid1 = %s,bid2 = %s,bid3 = %s,bid4 = %s,bid5 = %s,bid6 = %s,bid7 = %s,bid8 = %s,bid9 = %s,max0=%s,max1=%s,max2=%s,max3=%s,max4=%s,max5=%s,max6=%s,max7=%s,max8=%s,max9=%s,"
+                "net0=%s,net1=%s,net2=%s,net3=%s,net4=%s,net5=%s,net6=%s,net7=%s,net8=%s,net9=%s,modDate = now() where setNo = %s")
+            cur24.execute(sql, (
+            settitle, bidstep, stp0, stp1, stp2, stp3, stp4, stp5, stp6, stp7, stp8, stp9, int0, int1, int2, int3, int4,
+            int5, int6, int7, int8, int9, bid0, bid1, bid2, bid3, bid4, bid5, bid6, bid7, bid8, bid9, max0, max1, max2,
+            max3, max4, max5, max6, max7, max8, max9, net0, net1, net2, net3, net4, net5, net6, net7, net8, net9,setsno))
             db24.commit()
         except Exception as e:
             print('접속오류', e)
@@ -653,14 +670,14 @@ def sethotcoin(coinn, yn):
     try:
         if yn == 'N':
             sql = "UPDATE hotCoins SET attrib = %s where coinName=%s"
-            cur27.execute(sql, ("XXX00XXX00XXX00",coinn))
+            cur27.execute(sql, ("XXX00XXX00XXX00", coinn))
             db27.commit()
         else:
             sql = "UPDATE hotCoins SET attrib = %s where coinName=%s"
             cur27.execute(sql, ("XXX00XXX00XXX00", coinn))
             db27.commit()
             sql2 = "INSERT INTO hotCoins (coinName, regDate) VALUES (%s, now())"
-            cur27.execute(sql2,coinn)
+            cur27.execute(sql2, coinn)
             db27.commit()
     except Exception as e:
         print('접속오류', e)
@@ -675,11 +692,11 @@ def selectboardlist(brdid):
     cur28 = db28.cursor()
     try:
         sql = "SELECT * FROM board WHERE boardId=%s and attrib NOT LIKE %s"
-        cur28.execute(sql, (brdid,"XXX%"))
+        cur28.execute(sql, (brdid, "XXX%"))
         rows = cur28.fetchall()
         return rows
     except Exception as e:
-        print('게시판 조회 오류',e)
+        print('게시판 조회 오류', e)
     finally:
         cur28.close()
         db28.close()
@@ -707,10 +724,10 @@ def boardupdate(brdno, btitle, bcontents):
     cur30 = db30.cursor()
     try:
         sql = "UPDATE board SET title = %s, context = %s, modDate = now() where boardno=%s"
-        cur30.execute(sql, (btitle, bcontents,brdno))
+        cur30.execute(sql, (btitle, bcontents, brdno))
         db30.commit()
     except Exception as e:
-        print('게시판 업데이트 오류',e)
+        print('게시판 업데이트 오류', e)
     finally:
         cur30.close()
         db30.close()
@@ -725,10 +742,11 @@ def boardnewwrite(brdid, btitle, bcontents, userid):
         cur31.execute(sql, (brdid, btitle, bcontents, userid))
         db31.commit()
     except Exception as e:
-        print('게시판 작성 오류',e)
+        print('게시판 작성 오류', e)
     finally:
         cur31.close()
         db31.close()
+
 
 def getmessage(uno):
     global rows
@@ -774,7 +792,7 @@ def savemultisetup(coinn, iniAsset, intRate, holdNo, userNo):
         db34.close()
 
 
-def tradelog(uno,type,coinn,tstamp):
+def tradelog(uno, type, coinn, tstamp):
     global rows
     db35 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur35 = db35.cursor()
@@ -784,7 +802,7 @@ def tradelog(uno,type,coinn,tstamp):
         sql = "update tradeLog set attrib = %s where userNo = %s and tradeType = %s and coinName = %s"
         cur35.execute(sql, ("UPD00UPD00UPD00", uno, type, coinn))
         sql = "INSERT INTO tradeLog (userNo, tradeType, coinName, regDate) VALUES (%s, %s, %s, %s)"
-        cur35.execute(sql,(uno, type, coinn, tstamp))
+        cur35.execute(sql, (uno, type, coinn, tstamp))
         db35.commit()
     except Exception as e:
         print('접속오류 트레이드 로그', e)
@@ -793,7 +811,7 @@ def tradelog(uno,type,coinn,tstamp):
         db35.close()
 
 
-def cancelorder(uno,uuid):
+def cancelorder(uno, uuid):
     global rows
     db36 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur36 = db36.cursor()
@@ -834,10 +852,11 @@ def resethotcoins():
         cur38.execute(sql, ("XXX00XXX00XXX00", "10000%"))
         db38.commit()
     except Exception as e:
-        print("추천코인 리셋 에러",e)
+        print("추천코인 리셋 에러", e)
     finally:
         cur38.close()
         db38.close()
+
 
 def tradelist():
     global rows
@@ -848,7 +867,7 @@ def tradelist():
         cur39.execute(sql, "100001000010000")
         rows = cur39.fetchall()
     except Exception as e:
-        print("투자 현황 조회 에러",e)
+        print("투자 현황 조회 에러", e)
     finally:
         cur39.close()
         db39.close()
@@ -864,7 +883,7 @@ def gettradelog(coinn, sdate, uno):
         cur39.execute(sql, (uno, coinn, sdate))
         rows = cur39.fetchall()
     except Exception as e:
-        print("거래이력 조회 에러 (request 방식) ",e)
+        print("거래이력 조회 에러 (request 방식) ", e)
     finally:
         cur39.close()
         db39.close()
@@ -888,7 +907,7 @@ def tradedcoins(uno):
         return coins
 
 
-def modifyLog(uuid,stat):
+def modifyLog(uuid, stat):
     global rows
     db41 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur41 = db41.cursor()
@@ -900,23 +919,27 @@ def modifyLog(uuid,stat):
             stat = "CONF0CONF0CONF0"
         else:
             stat = "UPD00UPD00UPD00"
-        cur41.execute(sql, (stat,uuid))
+        cur41.execute(sql, (stat, uuid))
         db41.commit()
     except Exception as e:
-        print('거래 기록 업데이트 에러',e)
+        print('거래 기록 업데이트 에러', e)
     finally:
         cur41.close()
         db41.close()
 
 
-def insertLog(uno,ldata01,ldata02,ldata03,ldata04,ldata05,ldata06,ldata07,ldata08,ldata09,ldata10,ldata11,ldata12,ldata13,ldata14,ldata15,ldata16):
+def insertLog(uno, ldata01, ldata02, ldata03, ldata04, ldata05, ldata06, ldata07, ldata08, ldata09, ldata10, ldata11,
+              ldata12, ldata13, ldata14, ldata15, ldata16):
     global rows
     db42 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur42 = db42.cursor()
     try:
-        sql = ("insert into tradeLogDetail (userNo,orderDate,uuid,side,ord_type,price,market,created_at,volume,remaining_volume,reserved_fee,paid_fee,locked,executed_volume,excuted_funds,trades_count,time_in_force)"
-               " values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
-        cur42.execute(sql,(uno,ldata01,ldata02,ldata03,ldata04,ldata05,ldata06,ldata07,ldata08,ldata09,ldata10,ldata11,ldata12,ldata13,ldata14,ldata15,ldata16))
+        sql = (
+            "insert into tradeLogDetail (userNo,orderDate,uuid,side,ord_type,price,market,created_at,volume,remaining_volume,reserved_fee,paid_fee,locked,executed_volume,excuted_funds,trades_count,time_in_force)"
+            " values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+        cur42.execute(sql, (
+        uno, ldata01, ldata02, ldata03, ldata04, ldata05, ldata06, ldata07, ldata08, ldata09, ldata10, ldata11, ldata12,
+        ldata13, ldata14, ldata15, ldata16))
         db42.commit()
     except Exception as e:
         print("거래 기록 인서트 에러", e)
@@ -949,7 +972,7 @@ def getmyincomes(uno):
         cur44.execute(sql, uno)
         rows = cur44.fetchall()
     except Exception as e:
-        print("수익 조회 에러",e)
+        print("수익 조회 에러", e)
     finally:
         cur44.close()
         db44.close()
@@ -1010,7 +1033,7 @@ def custdetail(cno):
     cur48 = db48.cursor()
     try:
         sql = "select * from customerList where custNo = %s and attrib not like %s"
-        cur48.execute(sql, (cno,"XXXUP%"))
+        cur48.execute(sql, (cno, "XXXUP%"))
         rows = cur48.fetchone()
     except Exception as e:
         print("고객 상세 조회 에러", e)
@@ -1020,14 +1043,16 @@ def custdetail(cno):
         return rows
 
 
-def insertcust(cname,cid,contype,conamt,balamt,setdate,confr, conto, svrno,phno, mailaddr, snsid, parentid):
+def insertcust(cname, cid, contype, conamt, balamt, setdate, confr, conto, svrno, phno, mailaddr, snsid, parentid):
     global rows
     db48 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur48 = db48.cursor()
     try:
-        sql = ("insert into customerList (custName,custId,contType,contAmt,balanceAmt,settDate,contFrom,contTo,serverNo,phoneNo,mailAddress,snsId,parentId) "
-               "values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
-        cur48.execute(sql, (cname,cid,contype,conamt,balamt,setdate,confr, conto, svrno,phno, mailaddr, snsid, parentid))
+        sql = (
+            "insert into customerList (custName,custId,contType,contAmt,balanceAmt,settDate,contFrom,contTo,serverNo,phoneNo,mailAddress,snsId,parentId) "
+            "values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+        cur48.execute(sql, (
+        cname, cid, contype, conamt, balamt, setdate, confr, conto, svrno, phno, mailaddr, snsid, parentid))
         db48.commit()
     except Exception as e:
         print("고객 추가 에러", e)
@@ -1036,7 +1061,7 @@ def insertcust(cname,cid,contype,conamt,balamt,setdate,confr, conto, svrno,phno,
         db48.close()
 
 
-def changesvr(uno,svrno):
+def changesvr(uno, svrno):
     global rows
     db49 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur49 = db49.cursor()
@@ -1060,7 +1085,7 @@ def getsetupitem(setupno):
         cur50.execute(sql, setupno)
         rows = cur50.fetchone()
     except Exception as e:
-        print("구매설정 조회 에러",e)
+        print("구매설정 조회 에러", e)
     finally:
         cur50.close()
         db50.close()
@@ -1085,20 +1110,21 @@ def checkwalletremains(uno, coinn):
         db51.close()
         return mybalance, rows
 
+
 def servicestatus():
-        global rows
-        db52 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
-        cur52 = db52.cursor()
-        try:
-            sql = "select serverNo, serviceIp, serviceVer, regDate from service_Stat where (serverNo, regDate) in (select serverNo, max(regDate) as regDate from service_Stat group by serverNo) order by serverNo"
-            cur52.execute(sql)
-            rows = cur52.fetchall()
-        except Exception as e:
-            print("서비스 상태 조회 에러", e)
-        finally:
-            cur52.close()
-            db52.close()
-            return rows
+    global rows
+    db52 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
+    cur52 = db52.cursor()
+    try:
+        sql = "select serverNo, serviceIp, serviceVer, regDate from service_Stat where (serverNo, regDate) in (select serverNo, max(regDate) as regDate from service_Stat group by serverNo) order by serverNo"
+        cur52.execute(sql)
+        rows = cur52.fetchall()
+    except Exception as e:
+        print("서비스 상태 조회 에러", e)
+    finally:
+        cur52.close()
+        db52.close()
+        return rows
 
 
 def checkuuid(uuid):
@@ -1107,10 +1133,10 @@ def checkuuid(uuid):
     cur53 = db53.cursor()
     try:
         sql = "select count(*) from tradeLogDone where uuid=%s"
-        cur53.execute(sql,uuid)
+        cur53.execute(sql, uuid)
         result = cur53.fetchone()
     except Exception as e:
-        print("uuid 조회 에러",e)
+        print("uuid 조회 에러", e)
     finally:
         cur53.close()
         db53.close()
@@ -1123,15 +1149,15 @@ def tradehistorys(uno, setkey, coinn):
     db54 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur54 = db54.cursor()
     sql2 = "SELECT apiKey1, apiKey2 FROM traceUser WHERE setupKey=%s AND userNo=%s and attrib not like %s"
-    cur54.execute(sql2,(setkey, uno, '%XXX'))
+    cur54.execute(sql2, (setkey, uno, '%XXX'))
     keys = cur54.fetchone()
     if len(keys) == 0:
         print("No available Keys !!")
     else:
         key1 = keys[0]
         key2 = keys[1]
-        upbit = pyupbit.Upbit(key1,key2)
-        tradelist2 = upbit.get_order(coinn,state='done')
+        upbit = pyupbit.Upbit(key1, key2)
+        tradelist2 = upbit.get_order(coinn, state='done')
     cur54.close()
     db54.close()
     return tradelist2
@@ -1164,24 +1190,29 @@ def setLog(uno, setkey, coinn):
                         ldata11 = item["locked"]
                         ldata12 = item["executed_volume"]
                         ldata13 = item["trades_count"]
-                        inserttrLog(uno, ldata01, ldata02, ldata03, ldata04, ldata05, ldata06, ldata07, ldata08, ldata09, ldata10, ldata11,ldata12, ldata13)
+                        inserttrLog(uno, ldata01, ldata02, ldata03, ldata04, ldata05, ldata06, ldata07, ldata08,
+                                    ldata09, ldata10, ldata11, ldata12, ldata13)
                 else:
                     print("매수거래 패스")
     except Exception as e:
-        print("거래 기록 에러 ",e, "사용자 :", uno)
+        print("거래 기록 에러 ", e, "사용자 :", uno)
     finally:
         cur55.close()
         db55.close()
 
 
-def inserttrLog(uno,ldata01,ldata02,ldata03,ldata04,ldata05,ldata06,ldata07,ldata08,ldata09,ldata10,ldata11,ldata12,ldata13):
+def inserttrLog(uno, ldata01, ldata02, ldata03, ldata04, ldata05, ldata06, ldata07, ldata08, ldata09, ldata10, ldata11,
+                ldata12, ldata13):
     global rows
     db56 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur56 = db56.cursor()
     try:
-        sql = ("insert into tradeLogDone (userNo,uuid,side,ord_type,price,market,created_at,volume,remaining_volume,reserved_fee,paid_fee,locked,executed_volume,trades_count)"
-               " values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
-        cur56.execute(sql,(uno,ldata01,ldata02,ldata03,ldata04,ldata05,ldata06,ldata07,ldata08,ldata09,ldata10,ldata11,ldata12,ldata13))
+        sql = (
+            "insert into tradeLogDone (userNo,uuid,side,ord_type,price,market,created_at,volume,remaining_volume,reserved_fee,paid_fee,locked,executed_volume,trades_count)"
+            " values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+        cur56.execute(sql, (
+        uno, ldata01, ldata02, ldata03, ldata04, ldata05, ldata06, ldata07, ldata08, ldata09, ldata10, ldata11, ldata12,
+        ldata13))
         db56.commit()
     except Exception as e:
         print("거래완료 기록 인서트 에러", e)
@@ -1196,7 +1227,7 @@ def incomesum(uno):
     cur57 = db57.cursor()
     try:
         sql = "select * from (select * from incomeHistory where userNo = %s limit 30) as sub order by gettime ASC"
-        cur57.execute(sql,uno)
+        cur57.execute(sql, uno)
         item = cur57.fetchall()
         return item
     except Exception as e:
@@ -1212,7 +1243,7 @@ def sellc(uno):
     cur58 = db58.cursor()
     try:
         sql = "select lcCoinn, round(lcGap*100,4) lcGap, regDate, lcamt from lcLog where userNo = %s order by regDate DESC"
-        cur58.execute(sql,uno)
+        cur58.execute(sql, uno)
         item = cur58.fetchall()
         return item
     except Exception as e:
