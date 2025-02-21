@@ -1,72 +1,75 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
-{% include '/comm/header.html' %}
-<style>
-    .container{
-        padding-right: 0;
-        overflow: auto;
-    }
+    {% include '/comm/header.html' %}
+    <style>
+        .container {
+            padding-right: 0;
+            overflow: auto;
+        }
 
-    .chartContents > div{
-        border: 1px solid #BDBDBD;
-        padding: 10px;
-        margin-right: 20px;
-        margin-bottom: 20px;
-    }
+        .chartContents > div {
+            border: 1px solid #BDBDBD;
+            padding: 10px;
+            margin-right: 20px;
+            margin-bottom: 20px;
+        }
 
-</style>
+    </style>
 </head>
 <body>
-    <div id="commonTopHeader">
-{% include '/comm/commTopHeader.html' %}
-    </div>
+<div id="commonTopHeader">
+    {% include '/comm/commTopHeader.html' %}
+</div>
 
-    <div id="commonBodyContents">
-{% include '/comm/sidemenuadmin.html' %}
-        <!-- commonSideMenu end-->
+<div id="commonBodyContents">
+    {% include '/comm/sidemenuadmin.html' %}
+    <!-- commonSideMenu end-->
 
-        <div id="commonContent">
-            <div class="container">
+    <div id="commonContent">
+        <div class="container">
             <hr>
-             <div>
-                 <form action="/updatecust" method="post" onsubmit="return confirm('고객의 정보를 저장하시겠습니까?');">
-                 <table class="table">
-                     <tr style="display: none">
-                         <td>
-                         고객명
-                         </td>
-                         <td>
-                             <label for="custno"></label><input type="text" id="custno" name="custno" value="{{ cust[1] }}">
-                         </td>
-                         <td></td>
-                     </tr>
-                     <tr style="display: none">
-                         <td>
-                         고객명
-                         </td>
-                         <td>
-                             <label for="custid"></label><input type="text" id="custid" name="custid" value="{{ cust[2] }}">
-                         </td>
-                         <td></td>
-                     </tr>
-                 </table>
-                 </form>
-             </div>
+            <div>
+                <form action="/updatecust" method="post" onsubmit="return confirm('고객의 정보를 저장하시겠습니까?');">
+                    <table class="table">
+                        <tr style="display: none">
+                            <td>
+                                고객명
+                            </td>
+                            <td>
+                                <label for="custno"></label><input type="text" id="custno" name="custno"
+                                                                   value="{{ cust[1] }}">
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr style="display: none">
+                            <td>
+                                고객명
+                            </td>
+                            <td>
+                                <label for="custid"></label><input type="text" id="custid" name="custid"
+                                                                   value="{{ cust[2] }}">
+                            </td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </form>
             </div>
         </div>
     </div>
+</div>
 </body>
 <script>
     $(document).ready(function () {
     });
-        function setmypass(uno,passwd){
-            passwd = $('#mypasswd').val();
-            if (passwd == ""){
-                alert("변경하려는 암호가 없습니다.");
-                return;
-            }
-        data = [uno,passwd]
+
+    function setmypass(uno, passwd) {
+        passwd = $('#mypasswd').val();
+        if (passwd == "") {
+            alert("변경하려는 암호가 없습니다.");
+            return;
+        }
+        data = [uno, passwd]
         console.log(data);
         $.ajax({
             type: "POST",
@@ -78,7 +81,7 @@
                 console.log(res);
                 location.reload();
                 alert("암호가 변경되었습니다. 원활한 사용을 위해 다시 로그인 해주세요.")
-                }
+            }
         });
     }
 </script>

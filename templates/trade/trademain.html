@@ -1,225 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-{% include '/comm/header.html' %}
-<style>
-    .container{
-        padding-right: 0;
-        overflow: auto;
-    }
+    {% include '/comm/header.html' %}
+    <style>
+        .container {
+            padding-right: 0;
+            overflow: auto;
+        }
 
-    .chartContents{
-        display: flex;
-        flex-flow: row wrap;
-        align-items: center;
-        padding-bottom: 20px;
-    }
+        .chartContents {
+            display: flex;
+            flex-flow: row wrap;
+            align-items: center;
+            padding-bottom: 20px;
+        }
 
-    .chartContents > div{
-        border: 1px solid #BDBDBD;
-        padding: 10px;
-        box-shadow: 1px solid #BDBDBD;
-        box-shadow: 3px 3px 3px 3px #BDBDBD;
-        margin-right: 20px;
-        margin-bottom: 20px;
-    }
-    label {
-        display: block;
-        position: relative;
-        width: 100px;
-        height: 45px;
-        background: #d3d3d3;
-        border-radius: 60px;
-        transition: background 0.4s;
-}
-    label::after {
-  content: "";
-  position: absolute;
-  left: 2.5px;
-  top: 50%;
-  width: 40px;
-  height: 40px;
-  border-radius: 100%;
-  background-color: #fff;
-  transform: translateY(-50%);
-  box-shadow: 1px 3px 4px rgba(0,0,0,0.1);
-  transition: all 0.4s;
-}
-    label::before {
-  content: "OFF";
-  font-size: 24px;
-  font-family: Arial, Helvetica, sans-serif;
-  position: absolute;
-  left: 45px;
-  top: 50%;
-  transform: translateY(-50%);
-  transition: all 0.4s;
-}
-    #chk1:checked + label {
-  background:rgba(13, 202, 240)
-}
-    #chk1:checked + label::after {
- left: calc(100% - 42.5px);
-}
-#chk1:checked + label::before {
-  content: "ON";
-  color: #fff;
-  left: 15px;
-}
-</style>
+        .chartContents > div {
+            border: 1px solid #BDBDBD;
+            padding: 10px;
+            box-shadow: 1px solid #BDBDBD;
+            box-shadow: 3px 3px 3px 3px #BDBDBD;
+            margin-right: 20px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            position: relative;
+            width: 100px;
+            height: 45px;
+            background: #d3d3d3;
+            border-radius: 60px;
+            transition: background 0.4s;
+        }
+
+        label::after {
+            content: "";
+            position: absolute;
+            left: 2.5px;
+            top: 50%;
+            width: 40px;
+            height: 40px;
+            border-radius: 100%;
+            background-color: #fff;
+            transform: translateY(-50%);
+            box-shadow: 1px 3px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s;
+        }
+
+        label::before {
+            content: "OFF";
+            font-size: 24px;
+            font-family: Arial, Helvetica, sans-serif;
+            position: absolute;
+            left: 45px;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: all 0.4s;
+        }
+
+        #chk1:checked + label {
+            background: rgba(13, 202, 240)
+        }
+
+        #chk1:checked + label::after {
+            left: calc(100% - 42.5px);
+        }
+
+        #chk1:checked + label::before {
+            content: "ON";
+            color: #fff;
+            left: 15px;
+        }
+    </style>
 </head>
 <body>
-    <div id="commonTopHeader">
-{% include '/comm/commTopHeader.html' %}
-    </div>
+<div id="commonTopHeader">
+    {% include '/comm/commTopHeader.html' %}
+</div>
 
-    <div id="commonBodyContents">
-{% include '/comm/sidemenu.html' %}
-        <!-- commonSideMenu end-->
+<div id="commonBodyContents">
+    {% include '/comm/sidemenu.html' %}
+    <!-- commonSideMenu end-->
 
-        <div id="commonContent">
-            <div class="container">
+    <div id="commonContent">
+        <div class="container">
             <hr>
             <div style="display: inline">
-             <div style="float: left">
-                 <table class="table form-control table-bordered">
-                     <tbody class="form-control">
-                     <tr>
-                         <td style="text-align: center">
-                          설정 코인
-                         </td>
-                         <td style="text-align: center">
-                             <a href="https://upbit.com/exchange?code=CRIX.UPBIT.{{ result[0] }}">{{ result[0] }}</a>
-                         </td>
-                     </tr>
-                     <tr>
-                         <td style="text-align: center">
-                             시작금액
-                         </td>
-                         <td id = "initamount" style="text-align: right">
+                <div style="float: left">
+                    <table class="table form-control table-bordered">
+                        <tbody class="form-control">
+                        <tr>
+                            <td style="text-align: center">
+                                설정 코인
+                            </td>
+                            <td style="text-align: center">
+                                <a href="https://upbit.com/exchange?code=CRIX.UPBIT.{{ result[0] }}">{{ result[0] }}</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center">
+                                시작금액
+                            </td>
+                            <td id="initamount" style="text-align: right">
 
-                         </td>
-                     </tr>
-                     <tr>
-                         <td style="text-align: center">
-                             설정단계
-                         </td>
-                         <td style="text-align: right">
-                             {{ result[2] }}
-                         </td>
-                     </tr>
-                     <tr>
-                         <td style="text-align: center">
-                             거래설정
-                         </td>
-                         <td style="text-align: right">
-                             {{ trset[1] }}
-                         </td>
-                     </tr>
-                     <tr>
-                         <td style="text-align: center">
-                             동작상태
-                         </td>
-                         <td style="text-align:center">
-                             <input type="checkbox" id="chk1" name="chk1" class="custom-control-input" {% if result[5]=='Y' %}checked{% endif %} /><label for="switch"></label>
-                         </td>
-                     </tr>
-                     </tbody>
-                 </table>
-             </div>
-            <div style="float: left">
-                <table class="table form-control table-bordered">
-                    <tbody>
-                    <tr>
-                        <td>
-                            현재 잔고
-                        </td>
-                        <td id="mywon" style="text-align: right">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center">
+                                설정단계
+                            </td>
+                            <td style="text-align: right">
+                                {{ result[2] }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center">
+                                거래설정
+                            </td>
+                            <td style="text-align: right">
+                                {{ trset[1] }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center">
+                                동작상태
+                            </td>
+                            <td style="text-align:center">
+                                <input type="checkbox" id="chk1" name="chk1" class="custom-control-input"
+                                       {% if result[5]=='Y' %}checked{% endif %}/><label for="switch"></label>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="float: left">
+                    <table class="table form-control table-bordered">
+                        <tbody>
+                        <tr>
+                            <td>
+                                현재 잔고
+                            </td>
+                            <td id="mywon" style="text-align: right">
 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            필요금액
-                        </td>
-                        <td id = "needmon" style="text-align: right">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                필요금액
+                            </td>
+                            <td id="needmon" style="text-align: right">
 
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div style="float:left;">
-                <table id="tradestat" name="tradestat" class="table form-control table-bordered">
-                    <thead>
-                    <tr style="text-align: center;vertical-align: middle">
-                        <th>
-                        거래일시
-                        </th>
-                        <th>
-                        코인명
-                        </th>
-                        <th>
-                        거래종류<br>(ask=매도)
-                        </th>
-                        <th>
-                        거래상태
-                        </th>
-                        <th>
-                        주문가격
-                        </th>
-                        <th>
-                        주문수량
-                        </th>
-                        <th>
-                        주문금액
-                        </th>
-                        <th>
-                        미체결량
-                        </th>
-                        <th>
-                        예상수수료
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for items in list %}
-                    <tr>
-                        <td>
-                            {{ items['created_at'][:10] }} {{ items['created_at'][11:19] }}
-                        </td>
-                        <td>
-                            {{ items['market'] }}
-                        </td>
-                        <td style="text-align: center">
-                            {{ items['side'] }}
-                        </td>
-                        <td style="text-align: center">
-                            {{ items['state'] }}
-                        </td>
-                        <td style="text-align: right" class="oprice">
-                            {{ items['price'] }}
-                        </td>
-                        <td style="text-align: right" class="ovol">
-                            {{ items['volume'] }}
-                        </td>
-                        <td style="text-align: right" class="ovalue">
-                        </td>
-                        <td style="text-align: right">
-                            {{ items['remaining_volume'] }}
-                        </td>
-                        <td style="text-align: right">
-                            {{ items['reserved_fee'] }}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="float:left;">
+                    <table id="tradestat" name="tradestat" class="table form-control table-bordered">
+                        <thead>
+                        <tr style="text-align: center;vertical-align: middle">
+                            <th>
+                                거래일시
+                            </th>
+                            <th>
+                                코인명
+                            </th>
+                            <th>
+                                거래종류<br>(ask=매도)
+                            </th>
+                            <th>
+                                거래상태
+                            </th>
+                            <th>
+                                주문가격
+                            </th>
+                            <th>
+                                주문수량
+                            </th>
+                            <th>
+                                주문금액
+                            </th>
+                            <th>
+                                미체결량
+                            </th>
+                            <th>
+                                예상수수료
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for items in list %}
+                            <tr>
+                                <td>
+                                    {{ items['created_at'][:10] }} {{ items['created_at'][11:19] }}
+                                </td>
+                                <td>
+                                    {{ items['market'] }}
+                                </td>
+                                <td style="text-align: center">
+                                    {{ items['side'] }}
+                                </td>
+                                <td style="text-align: center">
+                                    {{ items['state'] }}
+                                </td>
+                                <td style="text-align: right" class="oprice">
+                                    {{ items['price'] }}
+                                </td>
+                                <td style="text-align: right" class="ovol">
+                                    {{ items['volume'] }}
+                                </td>
+                                <td style="text-align: right" class="ovalue">
+                                </td>
+                                <td style="text-align: right">
+                                    {{ items['remaining_volume'] }}
+                                </td>
+                                <td style="text-align: right">
+                                    {{ items['reserved_fee'] }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
+</div>
 </body>
 <script>
     $(document).ready(function () {
@@ -227,33 +234,33 @@
         calorder();
     });
 
-    $("#chk1").change(function(){
-    var uno = {{ session["userNo"] }}
-    if($('input[name="chk1"]').is(":checked") === true){
-        setyn(uno,"Y");
-    } else {
-    setyn(uno,"N");
-    }
+    $("#chk1").change(function () {
+        var uno = {{ session["userNo"] }}
+        if ($('input[name="chk1"]').is(":checked") === true) {
+            setyn(uno, "Y");
+        } else {
+            setyn(uno, "N");
+        }
     });
 
-    function calneed(){
+    function calneed() {
         var stm = {{ result[1] }};
         var times = {{ result[2] }};
         var summ = stm;
         var vsum = stm;
-        for (i=1; i < times +1; i++) {
-            summ = summ + vsum*2**i;
+        for (i = 1; i < times + 1; i++) {
+            summ = summ + vsum * 2 ** i;
         }
         $('#needmon').html(numberWithCommas(summ));
         $('#mywon').html(numberWithCommas({{ wallet }}));
         $('#initamount').html(numberWithCommas({{ result[1] }}));
     }
 
-    function calorder(){
+    function calorder() {
         $Arr = $(".oprice");
         $Brr = $(".ovol");
         $Crr = $(".ovalue");
-        for (i=0; i< $Arr.length; i++){
+        for (i = 0; i < $Arr.length; i++) {
             var pri = parseFloat($Arr[i].innerText);
             var vol = parseFloat($Brr[i].innerText);
             var oval = parseInt(pri * vol);
@@ -261,8 +268,8 @@
         }
     }
 
-    function setyn(uno,yn){
-        data = [uno,yn]
+    function setyn(uno, yn) {
+        data = [uno, yn]
         console.log(data);
         $.ajax({
             type: "POST",
@@ -273,22 +280,23 @@
             success: (res) => {
                 console.log(res);
                 location.reload();
-                }
+            }
         });
     }
 
     function numberWithCommas(x) {
-		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-	}
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     function numberNoneCommas(x) {
-		return x.toString().replace(/[\D\s\._\-]+/g, "");
-	}
+        return x.toString().replace(/[\D\s\._\-]+/g, "");
+    }
 
     window.setInterval('refresh()', 30000); 	// Call a function every 10000 milliseconds (OR 10 seconds).
 
     // Refresh or reload page.
     function refresh() {
-        window .location.reload();
+        window.location.reload();
     }
 </script>
 </html>

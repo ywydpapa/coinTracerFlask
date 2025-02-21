@@ -1,53 +1,55 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
-{% include './comm/header.html' %}
-<style>
-    .container{
-        padding-right: 0;
-        overflow: auto;
-    }
+    {% include './comm/header.html' %}
+    <style>
+        .container {
+            padding-right: 0;
+            overflow: auto;
+        }
 
-    .chartContents > div{
-        border: 1px solid #BDBDBD;
-        padding: 10px;
-        box-shadow: 1px solid #BDBDBD;
-        box-shadow: 3px 3px 3px 3px #BDBDBD;
-        margin-right: 20px;
-        margin-bottom: 20px;
-    }
+        .chartContents > div {
+            border: 1px solid #BDBDBD;
+            padding: 10px;
+            box-shadow: 1px solid #BDBDBD;
+            box-shadow: 3px 3px 3px 3px #BDBDBD;
+            margin-right: 20px;
+            margin-bottom: 20px;
+        }
 
-</style>
+    </style>
 </head>
 <body>
-    <div id="commonTopHeader">
-{% include './comm/commTopHeader.html' %}
-    </div>
+<div id="commonTopHeader">
+    {% include './comm/commTopHeader.html' %}
+</div>
 
-    <div id="commonBodyContents">
-{% include './comm/sidemenu.html' %}
-        <!-- commonSideMenu end-->
+<div id="commonBodyContents">
+    {% include './comm/sidemenu.html' %}
+    <!-- commonSideMenu end-->
 
-        <div id="commonContent">
-            <div class="container">
+    <div id="commonContent">
+        <div class="container">
             <hr>
-             <div>
-             <table class="table">
-                 {% for coin in coinlist %}
-             <tr>
-                 <td class="coinn">
-                     <a href="https://upbit.com/exchange?code=CRIX.UPBIT.{{ coin[1]}}">{{ coin[1] }}</a>
-                 </td>
-                 <td>
-                     <button class="btn-primary" onclick="location.href='/tradeSet?coinn={{ coin[1] }}'">투자 설정 변경</button>
-                 </td>
-             </tr>
-                 {% endfor %}
-             </table>
-             </div>
+            <div>
+                <table class="table">
+                    {% for coin in coinlist %}
+                        <tr>
+                            <td class="coinn">
+                                <a href="https://upbit.com/exchange?code=CRIX.UPBIT.{{ coin[1] }}">{{ coin[1] }}</a>
+                            </td>
+                            <td>
+                                <button class="btn-primary" onclick="location.href='/tradeSet?coinn={{ coin[1] }}'">투자
+                                    설정 변경
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
             </div>
         </div>
     </div>
+</div>
 </body>
 <script>
     $(document).ready(function () {

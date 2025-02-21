@@ -1,305 +1,398 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        {% include '/comm/adheader.html' %}
+    {% include '/comm/adheader.html' %}
 </head>
 <body id="page-top">
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-        {% include '/comm/sidebar.html' %}
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-            <!-- Main Content -->
-            <div id="content">
-                {% include '/comm/adtopbar.html' %}
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-                    <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">상세 설정 관리</h1>
-                    <hr>
-                    <div>
-             <form action="/updateset" method="post" onsubmit="return confirm('설정내용을 저장하시겠습니까?');">
-                <table class="table table-bordered">
-                <colgroup>
-    	             <col width="20%" />
-                     <col width="20%" />
-                     <col width="20%" />
-                     <col width="20%" />
-                     <col width="20%" />
-                </colgroup>
-                    <thead>
-                    <tr>
-                        <td style="text-align: center">
-                            <h5>트레이딩 설정명</h5>
-                        </td>
-                        <td colspan="2">
-                            <input name="settitle" type="text" class="form-control" value="{{ rows[1] }}">
-                            <input name="setno" id="setno" type="text" class="form-control" value="{{ rows[0] }}" style = "display: none">
-                        </td>
-                        <td colspan="2">
-                            <button type="submit" value="submit" class="form-control btn btn-primary"> 수정 </button>
-                        </td>
-                    </tr>
-                    <tr style = "display: none">
-                        <td style="text-align: center"> <h5>시작 금액 (1차 구매)</h5></td>
-                        <td colspan="2">
-                            <input id="initprice" name="initprice" class="form-control" type="text" value="10000" placeholder="10,000" style = "text-align: right" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
-                        </td>
-                        <td colspan="2"></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center"> <h5>구간 설정</h5></td>
-                        <td colspan="2">
-                            <select id="bidsteps" name="bidsteps" class="form-control" style="text-align: right">
-                                <option value="1" {% if rows[2]==1 %}selected{% endif %}>02</option>
-                                <option value="2" {% if rows[2]==2 %}selected{% endif %}>03</option>
-                                <option value="3" {% if rows[2]==3 %}selected{% endif %}>04</option>
-                                <option value="4" {% if rows[2]==4 %}selected{% endif %}>05</option>
-                                <option value="5" {% if rows[2]==5 %}selected{% endif %}>06</option>
-                                <option value="6" {% if rows[2]==6 %}selected{% endif %}>07</option>
-                                <option value="7" {% if rows[2]==7 %}selected{% endif %}>08</option>
-                                <option value="8" {% if rows[2]==8 %}selected{% endif %}>09</option>
-                                <option value="9" {% if rows[2]==9 %}selected{% endif %}>10</option>
-                            </select>
-                        </td>
-                        <td  colspan="2" style="text-align: center">
-                            <input type="text" name="skey" value="{{ session["setkey"] }}" style="display: none">
-                            <input type="text" name="userno" value="{{ session["userNo"] }}" style="display: none">
-                            <input type="text" name="svrno" value="{{ session["serverNo"] }}" style="display: none">
-                            사용여부 <br>
-                            <input type="checkbox" id="chkyn" name="chkyn" {% if rows[43]=='Y' %}checked{% endif %}>
-                        </td>
-                    </tr>
-                    </thead>
-                    <tr>
-                        <td style="text-align: center"> <h5>구간 간격 (%) </h5></td>
-                        <td colspan="2">
-                            <div style="text-align: right">
-                            <div>
-                            <input id="steprate" name="steprate" style="text-align: right" class="form-control" type="number" min="0" max="10" step="0.01" value="{{ rows[3] }}">
-                            </div>
-                            </div>
-                        </td>
-                        <td colspan="2" style="text-align: center">
-                            일괄설정<br>
-                            <input type="checkbox" id="gapchkb">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center"> <h5>설정 이율 (%) </h5></td>
-                        <td colspan="2">
-                            <div>
-                            <div>
-                            <input id="profitrate" name="profitrate" style="text-align: right" class="form-control" type="number" min="0" max="10" step="0.01" value="{{ rows[13] }}">
-                            </div>
-                            </div>
-                        </td>
-                        <td colspan="2" style="text-align: center">
-                            일괄설정<br>
-                            <input type="checkbox" id="intchkb" checked>
-                        </td>
-                    </tr>
-                    <tr style="text-align: center">
-                        <td>
+<!-- Page Wrapper -->
+<div id="wrapper">
+    {% include '/comm/sidebar.html' %}
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            {% include '/comm/adtopbar.html' %}
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <h1 class="h3 mb-4 text-gray-800">상세 설정 관리</h1>
+                <hr>
+                <div>
+                    <form action="/updateset" method="post" onsubmit="return confirm('설정내용을 저장하시겠습니까?');">
+                        <table class="table table-bordered">
+                            <colgroup>
+                                <col width="20%"/>
+                                <col width="20%"/>
+                                <col width="20%"/>
+                                <col width="20%"/>
+                                <col width="20%"/>
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <td style="text-align: center">
+                                    <h5>트레이딩 설정명</h5>
+                                </td>
+                                <td colspan="2">
+                                    <input name="settitle" type="text" class="form-control" value="{{ rows[1] }}">
+                                    <input name="setno" id="setno" type="text" class="form-control"
+                                           value="{{ rows[0] }}" style="display: none">
+                                </td>
+                                <td colspan="2">
+                                    <button type="submit" value="submit" class="form-control btn btn-primary"> 수정
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr style="display: none">
+                                <td style="text-align: center"><h5>시작 금액 (1차 구매)</h5></td>
+                                <td colspan="2">
+                                    <input id="initprice" name="initprice" class="form-control" type="text"
+                                           value="10000" placeholder="10,000" style="text-align: right"
+                                           oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>
+                                </td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center"><h5>구간 설정</h5></td>
+                                <td colspan="2">
+                                    <select id="bidsteps" name="bidsteps" class="form-control"
+                                            style="text-align: right">
+                                        <option value="1" {% if rows[2]==1 %}selected{% endif %}>02</option>
+                                        <option value="2" {% if rows[2]==2 %}selected{% endif %}>03</option>
+                                        <option value="3" {% if rows[2]==3 %}selected{% endif %}>04</option>
+                                        <option value="4" {% if rows[2]==4 %}selected{% endif %}>05</option>
+                                        <option value="5" {% if rows[2]==5 %}selected{% endif %}>06</option>
+                                        <option value="6" {% if rows[2]==6 %}selected{% endif %}>07</option>
+                                        <option value="7" {% if rows[2]==7 %}selected{% endif %}>08</option>
+                                        <option value="8" {% if rows[2]==8 %}selected{% endif %}>09</option>
+                                        <option value="9" {% if rows[2]==9 %}selected{% endif %}>10</option>
+                                    </select>
+                                </td>
+                                <td colspan="2" style="text-align: center">
+                                    <input type="text" name="skey" value="{{ session["setkey"] }}"
+                                           style="display: none">
+                                    <input type="text" name="userno" value="{{ session["userNo"] }}"
+                                           style="display: none">
+                                    <input type="text" name="svrno" value="{{ session["serverNo"] }}"
+                                           style="display: none">
+                                    사용여부 <br>
+                                    <input type="checkbox" id="chkyn" name="chkyn"
+                                           {% if rows[43]=='Y' %}checked{% endif %}>
+                                </td>
+                            </tr>
+                            </thead>
+                            <tr>
+                                <td style="text-align: center"><h5>구간 간격 (%) </h5></td>
+                                <td colspan="2">
+                                    <div style="text-align: right">
+                                        <div>
+                                            <input id="steprate" name="steprate" style="text-align: right"
+                                                   class="form-control" type="number" min="0" max="10" step="0.01"
+                                                   value="{{ rows[3] }}">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td colspan="2" style="text-align: center">
+                                    일괄설정<br>
+                                    <input type="checkbox" id="gapchkb">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center"><h5>설정 이율 (%) </h5></td>
+                                <td colspan="2">
+                                    <div>
+                                        <div>
+                                            <input id="profitrate" name="profitrate" style="text-align: right"
+                                                   class="form-control" type="number" min="0" max="10" step="0.01"
+                                                   value="{{ rows[13] }}">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td colspan="2" style="text-align: center">
+                                    일괄설정<br>
+                                    <input type="checkbox" id="intchkb" checked>
+                                </td>
+                            </tr>
+                            <tr style="text-align: center">
+                                <td>
 
-                        </td>
-                        <td>
-                            매수금액
-                        </td>
-                        <td>
-                            필요금액
-                        </td>
-                        <td>
-                            간격(%)
-                        </td>
-                        <td>
-                            이율(%)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center; vertical-align: center"> <h5>1차 매수 구간 </h5></td>
-                        <td id="trvalst" style="text-align: right">
-                            <input id="bid00" name="bid00" style="text-align: right" class="form-control bidinput" type="number" min="10000" max="" step="10000" value="{{ rows[23] }}">
-                        </td>
-                        <td style="text-align: right" id = "trsumst">
-                            <input id="max00" name="max00" style="text-align: right" class="form-control maxinput" type="number" min="10000" max="" step="10000" value="{{ rows[33] }}">
-                        </td>
-                        <td>
-                            <input id="gap00" name="gap00" style="text-align: right" class="form-control gapinput" type="number" min="0" max="5" step="0.01" value="{{ rows[3] }}">
-                        </td>
-                        <td>
-                            <input id="int00" name="int00" style="text-align: right" class="form-control intinput" type="number" min="0" max="5" step="0.01" value="{{ rows[13] }}">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: center"> <h5>2차 매수 구간 </h5></td>
-                        <td class="trval" style="text-align: right">
-                            <input id="bid01" name="bid01" style="text-align: right" class="form-control bidinput" type="number" min="0" max="" step="10000" value="{{ rows[24] }}">
-                        </td>
-                        <td style="text-align: right" class = "trsum">
-                            <input id="max01" name="max01" style="text-align: right" class="form-control maxinput" type="number" min="10000" max="" step="10000" value="{{ rows[34] }}">
-                        </td>
-                        <td>
-                             <input id="gap01" name="gap01" style="text-align: right" class="form-control gapinput" type="number" min="0" max="5" step="0.01" value="{{ rows[4] }}">
-                        </td>
-                        <td>
-                            <input id="int01" name="int01" style="text-align: right" class="form-control intinput" type="number" min="0" max="5" step="0.01" value="{{ rows[14] }}">
-                        </td>
-                    </tr>
-                <tr>
-                        <td style="text-align: center"> <h5>3차 매수 구간 </h5></td>
-                        <td class="trval" style="text-align: right">
-                            <input id="bid02" name="bid02" style="text-align: right" class="form-control bidinput" type="number" min="0" max="" step="10000" value="{{ rows[25] }}">
-                        </td>
-                        <td style="text-align: right" class = "trsum">
-                            <input id="max02" name="max02" style="text-align: right" class="form-control maxinput" type="number" min="10000" max="" step="10000" value="{{ rows[35] }}">
-                        </td>
-                        <td>
-                             <input id="gap02" name="gap02" style="text-align: right" class="form-control gapinput" type="number" min="0" max="5" step="0.01" value="{{ rows[5] }}">
-                        </td>
-                        <td>
-                            <input id="int02" name="int02" style="text-align: right" class="form-control intinput" type="number" min="0" max="5" step="0.01" value="{{ rows[15] }}">
-                        </td>
-                    </tr>
-                <tr>
-                        <td style="text-align: center"> <h5>4차 매수 구간 </h5></td>
-                        <td class="trval" style="text-align: right">
-                            <input id="bid03" name="bid03" style="text-align: right" class="form-control bidinput" type="number" min="0" max="" step="10000" value="{{ rows[26] }}">
-                        </td>
-                        <td style="text-align: right" class = "trsum">
-                            <input id="max03" name="max03" style="text-align: right" class="form-control maxinput" type="number" min="10000" max="" step="10000" value="{{ rows[36] }}">
-                        </td>
-                        <td>
-                             <input id="gap03" name="gap03" style="text-align: right" class="form-control gapinput" type="number" min="0" max="5" step="0.01" value="{{ rows[6] }}">
-                        </td>
-                        <td>
-                            <input id="int03" name="int03" style="text-align: right" class="form-control intinput" type="number" min="0" max="5" step="0.01" value="{{ rows[16] }}">
-                        </td>
-                    </tr>
-                <tr>
-                        <td style="text-align: center"> <h5>5차 매수 구간 </h5></td>
-                        <td class="trval" style="text-align: right">
-                            <input id="bid04" name="bid04" style="text-align: right" class="form-control bidinput" type="number" min="0" max="" step="10000" value="{{ rows[27] }}">
-                        </td>
-                        <td style="text-align: right" class = "trsum">
-                            <input id="max04" name="max04" style="text-align: right" class="form-control maxinput" type="number" min="10000" max="" step="10000" value="{{ rows[37] }}">
-                        </td>
-                        <td>
-                             <input id="gap04" name="gap04" style="text-align: right" class="form-control gapinput" type="number" min="0" max="5" step="0.01" value="{{ rows[7] }}">
-                        </td>
-                        <td>
-                            <input id="int04" name="int04" style="text-align: right" class="form-control intinput" type="number" min="0" max="5" step="0.01" value="{{ rows[17] }}">
-                        </td>
-                    </tr>
-                <tr>
-                        <td style="text-align: center"> <h5>6차 매수 구간 </h5></td>
-                        <td class="trval" style="text-align: right">
-                            <input id="bid05" name="bid05" style="text-align: right" class="form-control bidinput" type="number" min="0" max="" step="10000" value="{{ rows[28] }}">
-                        </td>
-                        <td style="text-align: right" class = "trsum">
-                            <input id="max05" name="max05" style="text-align: right" class="form-control maxinput" type="number" min="10000" max="" step="10000" value="{{ rows[38] }}">
-                        </td>
-                        <td>
-                             <input id="gap05" name="gap05" style="text-align: right" class="form-control gapinput" type="number" min="0" max="5" step="0.01" value="{{ rows[8] }}">
-                        </td>
-                        <td>
-                            <input id="int05" name="int05" style="text-align: right" class="form-control intinput" type="number" min="0" max="5" step="0.01" value="{{ rows[18] }}">
-                        </td>
-                    </tr>
-                <tr>
-                        <td style="text-align: center"> <h5>7차 매수 구간 </h5></td>
-                        <td class="trval" style="text-align: right">
-                            <input id="bid06" name="bid06" style="text-align: right" class="form-control bidinput" type="number" min="0" max="" step="10000" value="{{ rows[29] }}">
-                        </td>
-                        <td style="text-align: right" class = "trsum">
-                            <input id="max06" name="max06" style="text-align: right" class="form-control maxinput" type="number" min="10000" max="" step="10000" value="{{ rows[39] }}">
-                        </td>
-                        <td>
-                             <input id="gap06" name="gap06" style="text-align: right" class="form-control gapinput" type="number" min="0" max="5" step="0.01" value="{{ rows[9] }}">
-                        </td>
-                        <td>
-                            <input id="int06" name="int06" style="text-align: right" class="form-control intinput" type="number" min="0" max="5" step="0.01" value="{{ rows[19] }}">
-                        </td>
-                    </tr>
-                <tr>
-                        <td style="text-align: center"> <h5>8차 매수 구간 </h5></td>
-                        <td class="trval" style="text-align: right">
-                            <input id="bid07" name="bid07" style="text-align: right" class="form-control bidinput" type="number" min="0" max="" step="10000" value="{{ rows[30] }}">
-                        </td>
-                        <td style="text-align: right" class = "trsum">
-                            <input id="max07" name="max07" style="text-align: right" class="form-control maxinput" type="number" min="10000" max="" step="10000" value="{{ rows[40] }}">
-                        </td>
-                        <td>
-                             <input id="gap07" name="gap07" style="text-align: right" class="form-control gapinput" type="number" min="0" max="5" step="0.01" value="{{ rows[10] }}">
-                        </td>
-                        <td>
-                            <input id="int07" name="int07" style="text-align: right" class="form-control intinput" type="number" min="0" max="5" step="0.01" value="{{ rows[20] }}">
-                        </td>
-                    </tr>
-                <tr>
-                        <td style="text-align: center"> <h5>9차 매수 구간 </h5></td>
-                        <td class="trval" style="text-align: right">
-                            <input id="bid08" name="bid08" style="text-align: right" class="form-control bidinput" type="number" min="0" max="" step="10000" value="{{ rows[31] }}">
-                        </td>
-                        <td style="text-align: right" class = "trsum">
-                            <input id="max08" name="max08" style="text-align: right" class="form-control maxinput" type="number" min="10000" max="" step="10000" value="{{ rows[41] }}">
-                        </td>
-                        <td>
-                             <input id="gap08" name="gap08" style="text-align: right" class="form-control gapinput" type="number" min="0" max="5" step="0.01" value="{{ rows[11] }}">
-                        </td>
-                        <td>
-                            <input id="int08" name="int08" style="text-align: right" class="form-control intinput" type="number" min="0" max="5" step="0.01" value="{{ rows[21] }}">
-                        </td>
-                    </tr>
-                <tr>
-                        <td style="text-align: center"> <h5>10차 매수 구간 </h5></td>
-                        <td class="trval" style="text-align: right">
-                            <input id="bid09" name="bid09" style="text-align: right" class="form-control bidinput" type="number" min="0" max="" step="10000" value="{{ rows[32] }}">
-                        </td>
-                        <td style="text-align: right" class = "trsum">
-                            <input id="max09" name="max09" style="text-align: right" class="form-control maxinput" type="number" min="10000" max="" step="10000" value="{{ rows[42] }}">
-                        </td>
-                        <td>
-                             <input id="gap09" name="gap09" style="text-align: right" class="form-control gapinput" type="number" min="0" max="5" step="0.01" value="{{ rows[12] }}">
-                        </td>
-                        <td>
-                            <input id="int09" name="int09" style="text-align: right" class="form-control intinput" type="number" min="0" max="5" step="0.01" value="{{ rows[22] }}">
-                        </td>
-                </tr>
-                </table>
-             </form>
-             </div>
+                                </td>
+                                <td>
+                                    매수금액
+                                </td>
+                                <td>
+                                    필요금액
+                                </td>
+                                <td>
+                                    간격(%)
+                                </td>
+                                <td>
+                                    이율(%)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center; vertical-align: center"><h5>1차 매수 구간 </h5></td>
+                                <td id="trvalst" style="text-align: right">
+                                    <input id="bid00" name="bid00" style="text-align: right"
+                                           class="form-control bidinput" type="number" min="10000" max="" step="10000"
+                                           value="{{ rows[23] }}">
+                                </td>
+                                <td style="text-align: right" id="trsumst">
+                                    <input id="max00" name="max00" style="text-align: right"
+                                           class="form-control maxinput" type="number" min="10000" max="" step="10000"
+                                           value="{{ rows[33] }}">
+                                </td>
+                                <td>
+                                    <input id="gap00" name="gap00" style="text-align: right"
+                                           class="form-control gapinput" type="number" min="0" max="5" step="0.01"
+                                           value="{{ rows[3] }}">
+                                </td>
+                                <td>
+                                    <input id="int00" name="int00" style="text-align: right"
+                                           class="form-control intinput" type="number" min="0" max="5" step="0.01"
+                                           value="{{ rows[13] }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center"><h5>2차 매수 구간 </h5></td>
+                                <td class="trval" style="text-align: right">
+                                    <input id="bid01" name="bid01" style="text-align: right"
+                                           class="form-control bidinput" type="number" min="0" max="" step="10000"
+                                           value="{{ rows[24] }}">
+                                </td>
+                                <td style="text-align: right" class="trsum">
+                                    <input id="max01" name="max01" style="text-align: right"
+                                           class="form-control maxinput" type="number" min="10000" max="" step="10000"
+                                           value="{{ rows[34] }}">
+                                </td>
+                                <td>
+                                    <input id="gap01" name="gap01" style="text-align: right"
+                                           class="form-control gapinput" type="number" min="0" max="5" step="0.01"
+                                           value="{{ rows[4] }}">
+                                </td>
+                                <td>
+                                    <input id="int01" name="int01" style="text-align: right"
+                                           class="form-control intinput" type="number" min="0" max="5" step="0.01"
+                                           value="{{ rows[14] }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center"><h5>3차 매수 구간 </h5></td>
+                                <td class="trval" style="text-align: right">
+                                    <input id="bid02" name="bid02" style="text-align: right"
+                                           class="form-control bidinput" type="number" min="0" max="" step="10000"
+                                           value="{{ rows[25] }}">
+                                </td>
+                                <td style="text-align: right" class="trsum">
+                                    <input id="max02" name="max02" style="text-align: right"
+                                           class="form-control maxinput" type="number" min="10000" max="" step="10000"
+                                           value="{{ rows[35] }}">
+                                </td>
+                                <td>
+                                    <input id="gap02" name="gap02" style="text-align: right"
+                                           class="form-control gapinput" type="number" min="0" max="5" step="0.01"
+                                           value="{{ rows[5] }}">
+                                </td>
+                                <td>
+                                    <input id="int02" name="int02" style="text-align: right"
+                                           class="form-control intinput" type="number" min="0" max="5" step="0.01"
+                                           value="{{ rows[15] }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center"><h5>4차 매수 구간 </h5></td>
+                                <td class="trval" style="text-align: right">
+                                    <input id="bid03" name="bid03" style="text-align: right"
+                                           class="form-control bidinput" type="number" min="0" max="" step="10000"
+                                           value="{{ rows[26] }}">
+                                </td>
+                                <td style="text-align: right" class="trsum">
+                                    <input id="max03" name="max03" style="text-align: right"
+                                           class="form-control maxinput" type="number" min="10000" max="" step="10000"
+                                           value="{{ rows[36] }}">
+                                </td>
+                                <td>
+                                    <input id="gap03" name="gap03" style="text-align: right"
+                                           class="form-control gapinput" type="number" min="0" max="5" step="0.01"
+                                           value="{{ rows[6] }}">
+                                </td>
+                                <td>
+                                    <input id="int03" name="int03" style="text-align: right"
+                                           class="form-control intinput" type="number" min="0" max="5" step="0.01"
+                                           value="{{ rows[16] }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center"><h5>5차 매수 구간 </h5></td>
+                                <td class="trval" style="text-align: right">
+                                    <input id="bid04" name="bid04" style="text-align: right"
+                                           class="form-control bidinput" type="number" min="0" max="" step="10000"
+                                           value="{{ rows[27] }}">
+                                </td>
+                                <td style="text-align: right" class="trsum">
+                                    <input id="max04" name="max04" style="text-align: right"
+                                           class="form-control maxinput" type="number" min="10000" max="" step="10000"
+                                           value="{{ rows[37] }}">
+                                </td>
+                                <td>
+                                    <input id="gap04" name="gap04" style="text-align: right"
+                                           class="form-control gapinput" type="number" min="0" max="5" step="0.01"
+                                           value="{{ rows[7] }}">
+                                </td>
+                                <td>
+                                    <input id="int04" name="int04" style="text-align: right"
+                                           class="form-control intinput" type="number" min="0" max="5" step="0.01"
+                                           value="{{ rows[17] }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center"><h5>6차 매수 구간 </h5></td>
+                                <td class="trval" style="text-align: right">
+                                    <input id="bid05" name="bid05" style="text-align: right"
+                                           class="form-control bidinput" type="number" min="0" max="" step="10000"
+                                           value="{{ rows[28] }}">
+                                </td>
+                                <td style="text-align: right" class="trsum">
+                                    <input id="max05" name="max05" style="text-align: right"
+                                           class="form-control maxinput" type="number" min="10000" max="" step="10000"
+                                           value="{{ rows[38] }}">
+                                </td>
+                                <td>
+                                    <input id="gap05" name="gap05" style="text-align: right"
+                                           class="form-control gapinput" type="number" min="0" max="5" step="0.01"
+                                           value="{{ rows[8] }}">
+                                </td>
+                                <td>
+                                    <input id="int05" name="int05" style="text-align: right"
+                                           class="form-control intinput" type="number" min="0" max="5" step="0.01"
+                                           value="{{ rows[18] }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center"><h5>7차 매수 구간 </h5></td>
+                                <td class="trval" style="text-align: right">
+                                    <input id="bid06" name="bid06" style="text-align: right"
+                                           class="form-control bidinput" type="number" min="0" max="" step="10000"
+                                           value="{{ rows[29] }}">
+                                </td>
+                                <td style="text-align: right" class="trsum">
+                                    <input id="max06" name="max06" style="text-align: right"
+                                           class="form-control maxinput" type="number" min="10000" max="" step="10000"
+                                           value="{{ rows[39] }}">
+                                </td>
+                                <td>
+                                    <input id="gap06" name="gap06" style="text-align: right"
+                                           class="form-control gapinput" type="number" min="0" max="5" step="0.01"
+                                           value="{{ rows[9] }}">
+                                </td>
+                                <td>
+                                    <input id="int06" name="int06" style="text-align: right"
+                                           class="form-control intinput" type="number" min="0" max="5" step="0.01"
+                                           value="{{ rows[19] }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center"><h5>8차 매수 구간 </h5></td>
+                                <td class="trval" style="text-align: right">
+                                    <input id="bid07" name="bid07" style="text-align: right"
+                                           class="form-control bidinput" type="number" min="0" max="" step="10000"
+                                           value="{{ rows[30] }}">
+                                </td>
+                                <td style="text-align: right" class="trsum">
+                                    <input id="max07" name="max07" style="text-align: right"
+                                           class="form-control maxinput" type="number" min="10000" max="" step="10000"
+                                           value="{{ rows[40] }}">
+                                </td>
+                                <td>
+                                    <input id="gap07" name="gap07" style="text-align: right"
+                                           class="form-control gapinput" type="number" min="0" max="5" step="0.01"
+                                           value="{{ rows[10] }}">
+                                </td>
+                                <td>
+                                    <input id="int07" name="int07" style="text-align: right"
+                                           class="form-control intinput" type="number" min="0" max="5" step="0.01"
+                                           value="{{ rows[20] }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center"><h5>9차 매수 구간 </h5></td>
+                                <td class="trval" style="text-align: right">
+                                    <input id="bid08" name="bid08" style="text-align: right"
+                                           class="form-control bidinput" type="number" min="0" max="" step="10000"
+                                           value="{{ rows[31] }}">
+                                </td>
+                                <td style="text-align: right" class="trsum">
+                                    <input id="max08" name="max08" style="text-align: right"
+                                           class="form-control maxinput" type="number" min="10000" max="" step="10000"
+                                           value="{{ rows[41] }}">
+                                </td>
+                                <td>
+                                    <input id="gap08" name="gap08" style="text-align: right"
+                                           class="form-control gapinput" type="number" min="0" max="5" step="0.01"
+                                           value="{{ rows[11] }}">
+                                </td>
+                                <td>
+                                    <input id="int08" name="int08" style="text-align: right"
+                                           class="form-control intinput" type="number" min="0" max="5" step="0.01"
+                                           value="{{ rows[21] }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center"><h5>10차 매수 구간 </h5></td>
+                                <td class="trval" style="text-align: right">
+                                    <input id="bid09" name="bid09" style="text-align: right"
+                                           class="form-control bidinput" type="number" min="0" max="" step="10000"
+                                           value="{{ rows[32] }}">
+                                </td>
+                                <td style="text-align: right" class="trsum">
+                                    <input id="max09" name="max09" style="text-align: right"
+                                           class="form-control maxinput" type="number" min="10000" max="" step="10000"
+                                           value="{{ rows[42] }}">
+                                </td>
+                                <td>
+                                    <input id="gap09" name="gap09" style="text-align: right"
+                                           class="form-control gapinput" type="number" min="0" max="5" step="0.01"
+                                           value="{{ rows[12] }}">
+                                </td>
+                                <td>
+                                    <input id="int09" name="int09" style="text-align: right"
+                                           class="form-control intinput" type="number" min="0" max="5" step="0.01"
+                                           value="{{ rows[22] }}">
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
                 </div>
-                <!-- /.container-fluid -->
             </div>
-            <!-- End of Main Content -->
-             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; K3 Labs 2024</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
+            <!-- /.container-fluid -->
         </div>
-        <!-- End of Content Wrapper -->
+        <!-- End of Main Content -->
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; K3 Labs 2024</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
     </div>
-    <!-- End of Page Wrapper -->
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-     <!-- Bootstrap core JavaScript-->
+    <!-- End of Content Wrapper -->
+</div>
+<!-- End of Page Wrapper -->
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+<!-- Bootstrap core JavaScript-->
 {% include '/comm/adscript.html' %}
 </body>
 <script>
     $(document).ready(function () {
     });
 
-    $('#initprice').change(function(){
+    $('#initprice').change(function () {
         var valu = $('#initprice').val();
-        if (valu < 5000){
+        if (valu < 5000) {
             valu = 5000
         }
         $('#initprice').val(numberWithCommas(valu));
@@ -307,29 +400,29 @@
         document.getElementById('trsumst').innerText = "-";
     });
 
-    $('#steprate').change(function(){
+    $('#steprate').change(function () {
         var grate = $('#steprate').val();
         var $Garr = $(".gapinput");
         if ($('#gapchkb').is(":checked") === true) {
-            for ( i=0; i< $Garr.length; i++){
-             $Garr[i].value = grate;
+            for (i = 0; i < $Garr.length; i++) {
+                $Garr[i].value = grate;
             }
-        }else{
+        } else {
 
         }
     });
 
-    $("#chkyn").change(function(){
-    var sno = $("#setno").val();
-    if($('input[name="chkyn"]').is(":checked") === true){
-        settyn(sno,"Y");
-    } else {
-    settyn(sno,"N");
-    }
+    $("#chkyn").change(function () {
+        var sno = $("#setno").val();
+        if ($('input[name="chkyn"]').is(":checked") === true) {
+            settyn(sno, "Y");
+        } else {
+            settyn(sno, "N");
+        }
     });
 
-    function settyn(sno,yn){
-        data = [sno,yn]
+    function settyn(sno, yn) {
+        data = [sno, yn]
         $.ajax({
             type: "POST",
             url: '/settingyn',
@@ -339,15 +432,15 @@
             success: (res) => {
                 console.log(res);
                 location.reload();
-                }
+            }
         });
     }
 
-    $('#profitrate').change(function(){
-        var irate  = $('#profitrate').val();
+    $('#profitrate').change(function () {
+        var irate = $('#profitrate').val();
         var $Iarr = $(".intinput");
         if ($('#intchkb').is(":checked") === true) {
-            for (k=0; k<$Iarr.length; k++){
+            for (k = 0; k < $Iarr.length; k++) {
                 $Iarr[k].value = irate;
             }
         } else {
@@ -355,13 +448,14 @@
     });
 
     function numberWithCommas(x) {
-		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-	}
-    function numberNoneCommas(x) {
-		return x.toString().replace(/[\D\s\._\-]+/g, "");
-	}
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 
-    function setbid(){
+    function numberNoneCommas(x) {
+        return x.toString().replace(/[\D\s\._\-]+/g, "");
+    }
+
+    function setbid() {
         var intv = numberNoneCommas($('#initprice').val());
         var $Aarr = $(".trval");
         var $Barr = $(".trsum");
@@ -370,11 +464,11 @@
         document.getElementById('trvalst').innerText = numberWithCommas(setval);
         document.getElementById('trsumst').innerText = numberWithCommas(setval);
         for (var i = 0; i < 10; i++) {
-            if (i < $("#bidsteps").val()){
-            setval = setval *2 ;
-            sumval = parseInt(sumval) + parseInt(setval);
-            $Aarr[i].innerText = numberWithCommas(setval);
-            $Barr[i].innerText = numberWithCommas(sumval);
+            if (i < $("#bidsteps").val()) {
+                setval = setval * 2;
+                sumval = parseInt(sumval) + parseInt(setval);
+                $Aarr[i].innerText = numberWithCommas(setval);
+                $Barr[i].innerText = numberWithCommas(sumval);
             } else {
                 $Aarr[i].innerText = "0";
                 $Barr[i].innerText = "0";
@@ -382,7 +476,7 @@
         }
     }
 
-    function setbid2(){
+    function setbid2() {
         var intv = numberNoneCommas($('#initprice').val());
         var $Aarr = $(".trval");
         var $Barr = $(".trsum");
@@ -391,11 +485,11 @@
         document.getElementById('trvalst').innerText = numberWithCommas(setval);
         document.getElementById('trsumst').innerText = numberWithCommas(setval);
         for (var i = 0; i < 10; i++) {
-            if (i < $("#bidsteps").val()){
-            setval = sumval *2 ;
-            sumval = parseInt(sumval) + parseInt(setval);
-            $Aarr[i].innerText = numberWithCommas(setval);
-            $Barr[i].innerText = numberWithCommas(sumval);
+            if (i < $("#bidsteps").val()) {
+                setval = sumval * 2;
+                sumval = parseInt(sumval) + parseInt(setval);
+                $Aarr[i].innerText = numberWithCommas(setval);
+                $Barr[i].innerText = numberWithCommas(sumval);
             } else {
                 $Aarr[i].innerText = "0";
                 $Barr[i].innerText = "0";

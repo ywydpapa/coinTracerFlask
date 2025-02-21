@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        {% include './comm/adheader.html' %}
+    {% include './comm/adheader.html' %}
 </head>
 <body id="page-top">
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-        {% include './comm/sidebar.html' %}
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-            <!-- Main Content -->
-            <div id="content">
-                {% include './comm/adtopbar.html' %}
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-                    <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">새글 작성</h1>
-                    <form action="/writeboard" method="post" onsubmit="return confirm('새글을 저장하시겠습니까?');">
+<!-- Page Wrapper -->
+<div id="wrapper">
+    {% include './comm/sidebar.html' %}
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            {% include './comm/adtopbar.html' %}
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <h1 class="h3 mb-4 text-gray-800">새글 작성</h1>
+                <form action="/writeboard" method="post" onsubmit="return confirm('새글을 저장하시겠습니까?');">
                     <div>
                         <table class="table table-bordered">
                             <tr>
@@ -25,7 +25,8 @@
                                 </td>
                                 <td>
                                     <input type="hidden" id="boardId" name="boardId" class="form-control" value="1">
-                                    <input type="hidden" id="userId" name="userId" class="form-control" value="{{ session["userName"] }}">
+                                    <input type="hidden" id="userId" name="userId" class="form-control"
+                                           value="{{ session["userName"] }}">
                                     <input type="text" id="boardtitle" name="boardtitle" class="form-control" value="">
                                 </td>
                             </tr>
@@ -38,33 +39,36 @@
                                 </td>
                             </tr>
                             <tr style="text-align: center">
-                                <td colspan="2"><button type="submit" class="btn btn-primary" id="updateboard">등록</button> <button type="reset" class="btn btn-danger" id="canceledit">취소</button></td>
+                                <td colspan="2">
+                                    <button type="submit" class="btn btn-primary" id="updateboard">등록</button>
+                                    <button type="reset" class="btn btn-danger" id="canceledit">취소</button>
+                                </td>
                             </tr>
                         </table>
                     </div>
-                    </form>
-                </div>
-                <!-- /.container-fluid -->
+                </form>
             </div>
-            <!-- End of Main Content -->
-             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; K3 Labs 2024</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
+            <!-- /.container-fluid -->
         </div>
-        <!-- End of Content Wrapper -->
+        <!-- End of Main Content -->
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; K3 Labs 2024</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
     </div>
-    <!-- End of Page Wrapper -->
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-     <!-- Bootstrap core JavaScript-->
+    <!-- End of Content Wrapper -->
+</div>
+<!-- End of Page Wrapper -->
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+<!-- Bootstrap core JavaScript-->
 {% include './comm/adscript.html' %}
 </body>
 </html>

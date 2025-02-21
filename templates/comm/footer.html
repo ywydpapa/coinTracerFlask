@@ -1,18 +1,18 @@
 <script>
-document.addEventListener("keydown", function(event) {
-    if (event.key === "Backspace" && !document.activeElement.isContentEditable && document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA") {
-        event.preventDefault();
-        history.back();
-    }
-});
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Backspace" && !document.activeElement.isContentEditable && document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA") {
+            event.preventDefault();
+            history.back();
+        }
+    });
 </script>
-    <script src="{{ url_for('static', filename = 'vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ url_for('static', filename = 'vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static', filename = 'vendor/jquery/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename = 'vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="{{ url_for('static', filename = 'vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+<!-- Core plugin JavaScript-->
+<script src="{{ url_for('static', filename = 'vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="{{ url_for('static', filename ='js/sb-admin-2.min.js') }}"></script>
-    <script src="{{ url_for('static', filename ='vendor/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ url_for('static', filename ='vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+<!-- Custom scripts for all pages-->
+<script src="{{ url_for('static', filename ='js/sb-admin-2.min.js') }}"></script>
+<script src="{{ url_for('static', filename ='vendor/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename ='vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>

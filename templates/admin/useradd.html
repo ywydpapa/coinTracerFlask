@@ -15,7 +15,7 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
                 <!-- Page Heading -->
-                <h1 class="h3 mb-4 text-gray-800">고객 정보 관리</h1>
+                <h3 class="h3 mb-4 text-gray-800">사용자 추가</h3>
                 <hr>
                 <form action="/updatecust" method="post" onsubmit="return confirm('고객의 정보를 저장하시겠습니까?');">
                     <table class="form-control table table-bordered">
@@ -25,8 +25,7 @@
                                 고객명
                             </td>
                             <td>
-                                <label for="custname"></label><input type="text" id="custname" name="custname"
-                                                                     value="{{ cust[1] }}">
+                                <label for="custname"></label><input type="text" id="custname" name="custname" value="">
                             </td>
                         </tr>
                         <tr>
@@ -34,26 +33,7 @@
                                 고객아이디
                             </td>
                             <td>
-                                <label for="custid"></label><input type="text" id="custid" name="custid"
-                                                                   value="{{ cust[2] }}">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                계약 종류
-                            </td>
-                            <td>
-                                <label for="custtype"></label><input type="text" id="custtype" name="custtype"
-                                                                     value="{{ cust[3] }}">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                계약금
-                            </td>
-                            <td>
-                                <label for="contamt"></label><input type="text" id="contamt" name="contamt"
-                                                                    value="{{ cust[4] }}">
+                                <label for="custid"></label><input type="text" id="custid" name="custid" value="">
                             </td>
                         </tr>
                         <tr>
@@ -61,8 +41,7 @@
                                 누적금액
                             </td>
                             <td>
-                                <label for="balamt"></label><input type="text" id="balamt" name="balamt"
-                                                                   value="{{ cust[5] }}">
+                                <label for="balamt"></label><input type="text" id="balamt" name="balamt" value="">
                             </td>
                         </tr>
                         <tr>
@@ -70,8 +49,7 @@
                                 청구일
                             </td>
                             <td>
-                                <label for="settdate"></label><input type="text" id="settdate" name="settdate"
-                                                                     value="{{ cust[6] }}">
+                                <label for="settdate"></label><input type="text" id="settdate" name="settdate" value="">
                             </td>
                         </tr>
                         <tr>
@@ -79,8 +57,7 @@
                                 계약시작일
                             </td>
                             <td>
-                                <label for="contfr"></label><input type="text" id="contfr" name="contfr"
-                                                                   value="{{ cust[7] }}">
+                                <label for="contfr"></label><input type="text" id="contfr" name="contfr" value="">
                             </td>
                         </tr>
                         <tr>
@@ -88,8 +65,7 @@
                                 계약종료일
                             </td>
                             <td>
-                                <label for="contto"></label><input type="text" id="contto" name="contto"
-                                                                   value="{{ cust[8] }}">
+                                <label for="contto"></label><input type="text" id="contto" name="contto" value="">
                             </td>
                         </tr>
                         <tr>
@@ -97,8 +73,7 @@
                                 서버번호
                             </td>
                             <td>
-                                <label for="svrno"></label><input type="text" id="svrno" name="svrno"
-                                                                  value="{{ cust[9] }}">
+                                <label for="svrno"></label><input type="text" id="svrno" name="svrno" value="">
                             </td>
                         </tr>
                         <tr>
@@ -106,8 +81,7 @@
                                 전화번호
                             </td>
                             <td>
-                                <label for="telno"></label><input type="text" id="telno" name="telno"
-                                                                  value="{{ cust[10] }}">
+                                <label for="telno"></label><input type="text" id="telno" name="telno" value="">
                             </td>
                         </tr>
                         <tr>
@@ -115,8 +89,7 @@
                                 메일주소
                             </td>
                             <td>
-                                <label for="mailaddr"></label><input type="text" id="mailaddr" name="mailaddr"
-                                                                     value="{{ cust[11] }}">
+                                <label for="mailaddr"></label><input type="text" id="mailaddr" name="mailaddr" value="">
                             </td>
                         </tr>
                         <tr>
@@ -124,17 +97,7 @@
                                 SNS
                             </td>
                             <td>
-                                <label for="snsid"></label><input type="text" id="snsid" name="snsid"
-                                                                  value="{{ cust[12] }}">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                추천인
-                            </td>
-                            <td>
-                                <label for="parentid"></label><input type="text" id="parentid" name="parentid"
-                                                                     value="{{ cust[13] }}">
+                                <label for="snsid"></label><input type="text" id="snsid" name="snsid" value="">
                             </td>
                         </tr>
                         <tr>

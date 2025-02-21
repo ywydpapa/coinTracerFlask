@@ -9,11 +9,12 @@ from comm.dbconn import (selectUsers, setKeys, checkwallet, tradehistory, hotcoi
                          setmypasswd, updateuserdetail, updatetrbidadmin, settingonoff, hotcoinlist, sethotcoin,
                          selectboardlist, boarddetail, resethotcoins, setLog, \
                          boardupdate, boardnewwrite, setholdreset, getmessage, cancelorder, gettop20, tradehistorys,
-                         servicestatus,sellc,
+                         servicestatus, sellc,
                          tradelist, readmsg, gettradelog, tradedcoins, modifyLog, insertLog, getmytrlog, getmyincomes,
                          checkwalletremains,
                          mysettinglist, getsetupmax, erasebid, getsetups, setonoffs, editbidsetup, getlicence,
-                         mytradesetlist, setallonoff, custlist, custdetail, insertcust, changesvr, getsetupitem,incomesum,
+                         mytradesetlist, setallonoff, custlist, custdetail, insertcust, changesvr, getsetupitem,
+                         incomesum,
                          sellmycoinpercent)
 from comm.upbitdata import dashcandle548, get_ticker_tradevalue, dashcandle160
 import pyupbit
@@ -21,18 +22,20 @@ import os
 from dotenv import load_dotenv
 import ssl
 
-
 load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 Bootstrap(app)
+
 
 def format_currency(value):
     if isinstance(value, (int, float)):
         return "₩{:,.0f}".format(value)
     return value
 
+
 app.jinja_env.filters['currency'] = format_currency
+
 
 @app.route('/')
 def home():  # put application's code here
@@ -41,7 +44,7 @@ def home():  # put application's code here
 
 @app.route('/dashboard')
 def dashboard():
-    noticelist = selectboardlist(0) #공지사항 조회
+    noticelist = selectboardlist(0)  # 공지사항 조회
     boarditems = selectboardlist(1)
     btccand = [dashcandle548("KRW-BTC")]
     ethcand = [dashcandle548("KRW-ETH")]
@@ -53,17 +56,19 @@ def dashboard():
     listbtcc = btccand[0]['close'].tolist()
     listethc = ethcand[0]['close'].tolist()
     listxrpc = xrpcand[0]['close'].tolist()
-    return render_template('./trade/dashboard.html', btccands=listbtc, ethcands=listeth,xrpcands=listxrp, btccandsc=listbtcc, ethcandsc=listethc,xrpcandsc=listxrpc, indexv=indexv, noticelist=noticelist, boarditem=boarditems)
+    return render_template('./trade/dashboard.html', btccands=listbtc, ethcands=listeth, xrpcands=listxrp,
+                           btccandsc=listbtcc, ethcandsc=listethc, xrpcandsc=listxrpc, indexv=indexv,
+                           noticelist=noticelist, boarditem=boarditems)
 
 
 @app.route('/trade', methods=['GET', 'POST'])
 def trade():
-    global avprice,avprice2,avprice3
+    global avprice, avprice2, avprice3
     uno = request.args.get('uno')
     setkey = request.args.get('skey')
     tabindex = request.args.get('tabindex')
     license = getlicence(uno)[0]
-    setups = getsetups(uno,tabindex)
+    setups = getsetups(uno, tabindex)
     wallet = checkwalletwon(uno, setkey)
     orderlist = getorderlist(uno, tabindex)
     setno1 = setups[0][8]
@@ -86,24 +91,24 @@ def trade():
     srate2 = 0
     srate3 = 0
     for wallett in wallets:
-        if "KRW-"+wallett["currency"] == coinn1:
+        if "KRW-" + wallett["currency"] == coinn1:
             avprice1 = wallett["avg_buy_price"]
             if float(avprice1) <= 0:
                 avprice1 = 0
-        elif "KRW-"+wallett["currency"] == coinn2:
+        elif "KRW-" + wallett["currency"] == coinn2:
             avprice2 = wallett["avg_buy_price"]
             if float(avprice2) <= 0:
                 avprice2 = 0
-        elif "KRW-"+wallett["currency"] == coinn3:
+        elif "KRW-" + wallett["currency"] == coinn3:
             avprice3 = wallett["avg_buy_price"]
             if float(avprice3) <= 0:
                 avprice3 = 0
     if float(avprice1) > 0:
-        srate1 = round(float(crprice1)/float(avprice1)*100,4)
+        srate1 = round(float(crprice1) / float(avprice1) * 100, 4)
     if float(avprice2) > 0:
-        srate2 = round(float(crprice2)/float(avprice2)*100,4)
+        srate2 = round(float(crprice2) / float(avprice2) * 100, 4)
     if float(avprice3) > 0:
-        srate3 = round(float(crprice3)/float(avprice3)*100,4)
+        srate3 = round(float(crprice3) / float(avprice3) * 100, 4)
     coincand1 = [dashcandle160(coinn1)]
     listcoino1 = coincand1[0]['open'].tolist()
     listcoinc1 = coincand1[0]['close'].tolist()
@@ -113,11 +118,13 @@ def trade():
     coincand3 = [dashcandle160(coinn3)]
     listcoino3 = coincand3[0]['open'].tolist()
     listcoinc3 = coincand3[0]['close'].tolist()
-    return render_template('./trade/mytrademain.html', wallet=wallet, list=orderlist, trset1=trset1,trset2=trset2,trset3=trset3,
-                           coinopen1 = listcoino1, coinclose1 = listcoinc1, cprice1 = crprice1, bsrate1 = srate1,
-                           coinopen2 = listcoino2, coinclose2 = listcoinc2, cprice2 = crprice2, bsrate2 = srate2,
-                           coinopen3 = listcoino3, coinclose3 = listcoinc3, cprice3 = crprice3, bsrate3 = srate3,
-                           avprice1 = avprice1,avprice2 = avprice2,avprice3 = avprice3, setups = setups, tabindex = tabindex, license = license)
+    return render_template('./trade/mytrademain.html', wallet=wallet, list=orderlist, trset1=trset1, trset2=trset2,
+                           trset3=trset3,
+                           coinopen1=listcoino1, coinclose1=listcoinc1, cprice1=crprice1, bsrate1=srate1,
+                           coinopen2=listcoino2, coinclose2=listcoinc2, cprice2=crprice2, bsrate2=srate2,
+                           coinopen3=listcoino3, coinclose3=listcoinc3, cprice3=crprice3, bsrate3=srate3,
+                           avprice1=avprice1, avprice2=avprice2, avprice3=avprice3, setups=setups, tabindex=tabindex,
+                           license=license)
 
 
 @app.route('/tradeSet', methods=['GET', 'POST'])
@@ -140,7 +147,9 @@ def editSetup():
     tabindex = request.args.get('tabindex')
     setlist = selectsetlist(9)
     print(setlist)
-    return render_template('./trade/editmytrade.html', coinlist=coinlist, setno=setno, coinA=coinA, coinB= coinB, setlist=setlist, tabindex=tabindex)
+    return render_template('./trade/editmytrade.html', coinlist=coinlist, setno=setno, coinA=coinA, coinB=coinB,
+                           setlist=setlist, tabindex=tabindex)
+
 
 @app.route('/multisetup', methods=['GET', 'POST'])
 def multisetup():
@@ -184,7 +193,7 @@ def coincollect():
     skey = request.args.get('skey')
     coinn = request.args.get('coinn')
     setLog(uno, skey, coinn)
-    path="/coindetails?uno="+uno+"&skey="+skey+"&coinn="+coinn;
+    path = "/coindetails?uno=" + uno + "&skey=" + skey + "&coinn=" + coinn;
     return redirect(path)
 
 
@@ -194,7 +203,7 @@ def coindetail():
     skey = request.args.get('skey')
     coinlist = pyupbit.get_tickers(fiat="KRW")
     trcoinlist = tradedcoins(uno)
-    orderlist = tradehistory(uno, skey) #거래 일자만 검색
+    orderlist = tradehistory(uno, skey)  # 거래 일자만 검색
     trdate = []
     for order in orderlist:
         trdate.append(order["created_at"][0:10])
@@ -210,7 +219,8 @@ def coindetail():
     except Exception as e:
         orderlist2 = []
     trdate = sorted(trdate, reverse=True)
-    return render_template('./trade/mytraderesult.html', orderlist=trdate, myset = mysetrate, coinlist =coinlist, setcoin0 = setcoin, sdate = sdate, reqitems = orderlist2, trcoinlist = trcoinlist)
+    return render_template('./trade/mytraderesult.html', orderlist=trdate, myset=mysetrate, coinlist=coinlist,
+                           setcoin0=setcoin, sdate=sdate, reqitems=orderlist2, trcoinlist=trcoinlist)
 
 
 @app.route('/traderesult', methods=['GET', 'POST'])
@@ -223,7 +233,8 @@ def traderesult():
         incomes = getmyincomes(uno)
     except Exception as e:
         incomes = []
-    return render_template('./trade/mytradeearning.html', myset = mysetrate, setcoin0 = setcoin, sdate = sdate, incomes = incomes)
+    return render_template('./trade/mytradeearning.html', myset=mysetrate, setcoin0=setcoin, sdate=sdate,
+                           incomes=incomes)
 
 
 @app.route('/coindetails', methods=['GET', 'POST'])
@@ -255,7 +266,8 @@ def coindetails():
     except Exception as e:
         orderlist2 = []
     trdate = sorted(trdate, reverse=True)
-    return render_template('./trade/mytraderesult.html', orderlist=trdate, myset = mysetrate, coinlist = coinlist, setcoin0 = setcoin, sdate = sdate, reqitems = orderlist2, trcoinlist = trcoinlist)
+    return render_template('./trade/mytraderesult.html', orderlist=trdate, myset=mysetrate, coinlist=coinlist,
+                           setcoin0=setcoin, sdate=sdate, reqitems=orderlist2, trcoinlist=trcoinlist)
 
 
 @app.route('/tradestat', methods=['GET', 'POST'])
@@ -267,7 +279,7 @@ def tradestat():
         uno = request.args.get('uno')
         skey = request.args.get('skey')
         walletitems = checkwallet(uno, skey)
-        mysetcoins = getsetups(uno,0)
+        mysetcoins = getsetups(uno, 0)
         myset = []
         for mysetcoin in mysetcoins:
             myset.append(mysetcoin[6])
@@ -281,7 +293,7 @@ def tradestat():
                     cpr = 1
                 curr = [wallet['currency'], cpr]
                 mycoins.append(curr)
-        return render_template('./trade/mywallet.html', witems=walletitems, mycoins=mycoins, mysetcoin =myset)
+        return render_template('./trade/mywallet.html', witems=walletitems, mycoins=mycoins, mysetcoin=myset)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -305,7 +317,7 @@ def login():
                 svrno = row[0][2]
                 setKeys(uno, skey)
                 path = '/dashboard'
-                #path = '/t1rade?uno=' + str(uno) + '&skey=' + str(skey) + '&svrno=' + str(svrno)
+                # path = '/t1rade?uno=' + str(uno) + '&skey=' + str(skey) + '&svrno=' + str(svrno)
             except Exception as e:
                 session['userNo'] = 0
                 session['userName'] = '브라우저 재시작 필요'
@@ -337,7 +349,7 @@ def setupmybid():
         initprice = request.form.get('initprice')
         initprice = initprice.replace(',', '')
         initprice = initprice.replace(',', '')
-        askrate = request.form.get('lcrate') #손절률 추가
+        askrate = request.form.get('lcrate')  # 손절률 추가
         lcchk = request.form.get('lcchk')
         tradeset = request.form.get('tradeset')
         tradeset = tradeset.split(',')[0]
@@ -365,14 +377,17 @@ def setupmybid():
             limityn = 'Y'
         else:
             limityn = 'N'
-        erasebid(uno,skey, slot)
+        erasebid(uno, skey, slot)
         if coinn1 is not None:
-            setupbid(uno, skey, initprice, bidsetps, bidrate, askrate, coinn1, svrno, tradeset, hno, dyn, lmtamt, limityn, slot)
+            setupbid(uno, skey, initprice, bidsetps, bidrate, askrate, coinn1, svrno, tradeset, hno, dyn, lmtamt,
+                     limityn, slot)
         if coinn2 is not None:
-            setupbid(uno, skey, initprice, bidsetps, bidrate, askrate, coinn2, svrno, tradeset, hno, dyn, lmtamt, limityn, slot)
+            setupbid(uno, skey, initprice, bidsetps, bidrate, askrate, coinn2, svrno, tradeset, hno, dyn, lmtamt,
+                     limityn, slot)
         if coinn3 is not None:
-            setupbid(uno, skey, initprice, bidsetps, bidrate, askrate, coinn3, svrno, tradeset, hno, dyn, lmtamt, limityn, slot)
-    return redirect('/trade?uno=' + uno + '&skey=' + skey + '&tabindex=' + slot )
+            setupbid(uno, skey, initprice, bidsetps, bidrate, askrate, coinn3, svrno, tradeset, hno, dyn, lmtamt,
+                     limityn, slot)
+    return redirect('/trade?uno=' + uno + '&skey=' + skey + '&tabindex=' + slot)
 
 
 @app.route('/setupbid2', methods=['GET', 'POST'])
@@ -409,7 +424,8 @@ def editmybid2():
         else:
             bidrate = 0.0
         if coinn is not None:
-            editbidsetup(setno, uno, skey, initprice, bidsetps, bidrate, askrate, coinn, svrno, tradeset, hno, dyn, limityn, limitamt, slot)
+            editbidsetup(setno, uno, skey, initprice, bidsetps, bidrate, askrate, coinn, svrno, tradeset, hno, dyn,
+                         limityn, limitamt, slot)
     return redirect('/trade?uno=' + uno + '&skey=' + skey + '&tabindex=' + slot)
 
 
@@ -473,7 +489,8 @@ def setupmybidadmin():
         m7 = request.form.get('max07')
         m8 = request.form.get('max08')
         m9 = request.form.get('max09')
-        setuptrbidadmin(uno, skey, settitle, bidsteps, g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,m0,m1,m2,m3,m4,m5,m6,m7,m8,m9)
+        setuptrbidadmin(uno, skey, settitle, bidsteps, g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, r0, r1, r2, r3, r4, r5,
+                        r6, r7, r8, r9, b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, m0, m1, m2, m3, m4, m5, m6, m7, m8, m9)
     return redirect('/setlist')
 
 
@@ -481,14 +498,16 @@ def setupmybidadmin():
 def setlist():
     global rows
     rows = selectsets()
-    return render_template('./admin/setlistn.html', rows = rows)
+    return render_template('./admin/setlistn.html', rows=rows)
+
 
 @app.route('/tradesetlist', methods=['GET', 'POST'])
 def tradesetlist():
     global rows
     uno = request.args.get('uno')
     rows = mytradesetlist(uno)
-    return render_template('./trade/mysettinglist.html', rows = rows)
+    return render_template('./trade/mysettinglist.html', rows=rows)
+
 
 @app.route('/setDetail', methods=['GET', 'POST'])
 def detailset():
@@ -496,7 +515,7 @@ def detailset():
     sno = request.args.get('setno')
     rows = setdetail(sno)
     print(rows)
-    return render_template('./admin/setdetailn.html', rows = rows)
+    return render_template('./admin/setdetailn.html', rows=rows)
 
 
 @app.route('/logout')
@@ -509,6 +528,11 @@ def logout():
 def useradmin():
     users = listUsers()
     return render_template('./admin/useradminn.html', users=users)
+
+
+@app.route('/userAdd')
+def useradd():
+    return render_template('./admin/useradd.html')
 
 
 @app.route('/userDetail')
@@ -573,7 +597,7 @@ def setyns():
     item = getsetupitem(setno)
     # 지갑 조회 후 설정 리턴
     mybal = checkwalletremains(item[0], item[1])
-    wallvalue = float(mybal[0])*float(mybal[1])
+    wallvalue = float(mybal[0]) * float(mybal[1])
     if wallvalue > 100000:
         if yesno == 'Y':
             return "OVER"
@@ -592,7 +616,7 @@ def sethr():
     hldrst = pla[1]
     print(uno)
     print(hldrst)
-    setholdreset(uno,hldrst)
+    setholdreset(uno, hldrst)
     return "YES"
 
 
@@ -669,7 +693,7 @@ def cancorder():
     pla = request.get_data().decode('utf-8').split(',')
     uno = pla[0]
     uuid = pla[1]
-    cancelorder(uno,uuid)
+    cancelorder(uno, uuid)
     modifyLog(uuid, "canceled")
     return "YES"
 
@@ -678,19 +702,19 @@ def cancorder():
 def hotcoins():
     tickers = pyupbit.get_tickers(fiat="KRW")
     coindtl = pyupbit.get_orderbook(ticker=tickers)
-    trval = get_ticker_tradevalue() # 코인 거래금액 추가
-    return render_template('./admin/hotcoinsn.html', coinlist=tickers, coindtls = coindtl, trval = trval)
+    trval = get_ticker_tradevalue()  # 코인 거래금액 추가
+    return render_template('./admin/hotcoinsn.html', coinlist=tickers, coindtls=coindtl, trval=trval)
 
 
 @app.route('/hotcoinsm')
 def hotcoinsm():
     tickers = pyupbit.get_tickers(fiat="KRW")
     coindtl = pyupbit.get_orderbook(ticker=tickers)
-    trval = get_ticker_tradevalue() # 코인 거래금액 추가
-    return render_template('./admin/hotcoinsnm.html', coinlist=tickers, coindtls = coindtl, trval = trval)
+    trval = get_ticker_tradevalue()  # 코인 거래금액 추가
+    return render_template('./admin/hotcoinsnm.html', coinlist=tickers, coindtls=coindtl, trval=trval)
 
 
-@app.route('/updateset', methods=['POST'] )
+@app.route('/updateset', methods=['POST'])
 def updateset():
     global rows
     uno = request.form.get('userno')
@@ -738,28 +762,29 @@ def updateset():
     m8 = request.form.get('max08')
     m9 = request.form.get('max09')
     setno = request.form.get('setno')
-    updatetrbidadmin(uno, skey, settitle, bidsteps, g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, setno)
+    updatetrbidadmin(uno, skey, settitle, bidsteps, g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, r0, r1, r2, r3, r4, r5, r6,
+                     r7, r8, r9, b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, setno)
     rows = selectsets()
-    return render_template('./admin/setlistn.html', rows = rows)
+    return render_template('./admin/setlistn.html', rows=rows)
 
 
 @app.route('/boardlist')
 def boardlist():
     items = selectboardlist(1)
-    return render_template('./board/boardlist.html', items = items)
+    return render_template('./board/boardlist.html', items=items)
 
 
 @app.route('/lclist')
 def lclist():
     uno = request.args.get('uno')
     items = sellc(uno)
-    return render_template('./trade/mylclist.html', items = items)
+    return render_template('./trade/mylclist.html', items=items)
 
 
 @app.route('/noticelist')
 def noticelist():
     items = selectboardlist(0)
-    return render_template('./board/boardlist.html', items = items)
+    return render_template('./board/boardlist.html', items=items)
 
 
 @app.route('/boardwrite')
@@ -782,7 +807,7 @@ def updateboard():
     bcontents = request.form.get('boardcontents')
     boardupdate(brdno, btitle, bcontents)
     boardcont = selectboardlist(brdid)
-    return render_template('./board/boardlist.html', items = boardcont)
+    return render_template('./board/boardlist.html', items=boardcont)
 
 
 @app.route('/writeboard', methods=['POST'])
@@ -811,13 +836,13 @@ def msglist():
     items = getmessage(uno)
     print(uno)
     print(items)
-    return render_template('./board/msglist.html', items = items)
+    return render_template('./board/msglist.html', items=items)
 
 
 @app.route('/tradestatus')
 def tradestatus():
     items = tradelist()
-    return render_template('./admin/tradeStat.html', items = items)
+    return render_template('./admin/tradeStat.html', items=items)
 
 
 @app.route('/msgread', methods=['POST'])
@@ -828,7 +853,7 @@ def msgread():
     return "CHECK"
 
 
-@app.route('/incomesummary', methods=['POST','GET'])
+@app.route('/incomesummary', methods=['POST', 'GET'])
 def incomesummary():
     uno = request.args.get('uno')
     item = incomesum(uno)
@@ -838,12 +863,13 @@ def incomesummary():
         tval.append(str(data[1]))
         ival.append(str(data[2]))
     print(tval)
-    return render_template('./trade/incsum.html', items = item, tval = tval, ival = ival)
+    return render_template('./trade/incsum.html', items=item, tval=tval, ival=ival)
+
 
 @app.route('/serverStatus')
 def serverStatus():
     items = servicestatus()
-    return render_template('./admin/serverlist.html', items = items)
+    return render_template('./admin/serverlist.html', items=items)
 
 
 @app.errorhandler(404)
