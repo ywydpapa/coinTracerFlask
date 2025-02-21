@@ -28,6 +28,7 @@
                                 <th>코인명</th>
                                 <th>손절율</th>
                                 <th>손절액</th>
+                                <th>당시현금잔액</th>
                                 <th>손절시간</th>
                                 </thead>
                                 <tbody>
@@ -36,6 +37,7 @@
                                         <td style="text-align: center">{{ item[0] }}</td>
                                         <td style="text-align: right">{{ item[1] }} %</td>
                                         <td style="text-align: right">{{ item[3] | currency }}</td>
+                                        <td style="text-align: right">{{ item[4] | currency }}</td>
                                         <td style="text-align: center">{{ item[2] }}</td>
                                     </tr>
                                 {% endfor %}
