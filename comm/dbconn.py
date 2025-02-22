@@ -1251,3 +1251,17 @@ def sellc(uno):
     finally:
         cur58.close()
         db58.close()
+
+
+def setlconoff(setno, srate, yesno):
+    db59 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
+    cur59 = db59.cursor()
+    try:
+        sql = "UPDATE traceSetup SET bidRate = %s, askRate = %s where setupNo=%s"
+        cur59.execute(sql, (yesno, srate, setno))
+        db59.commit()
+    except Exception as e:
+        print('손절 ONOFF 오류', e)
+    finally:
+        cur59.close()
+        db59.close()

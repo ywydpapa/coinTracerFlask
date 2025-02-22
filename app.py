@@ -11,7 +11,7 @@ from comm.dbconn import (selectUsers, setKeys, checkwallet, tradehistory, hotcoi
                          boardupdate, boardnewwrite, setholdreset, getmessage, cancelorder, gettop20, tradehistorys,
                          servicestatus, sellc,
                          tradelist, readmsg, gettradelog, tradedcoins, modifyLog, insertLog, getmytrlog, getmyincomes,
-                         checkwalletremains,
+                         checkwalletremains, setlconoff,
                          mysettinglist, getsetupmax, erasebid, getsetups, setonoffs, editbidsetup, getlicence,
                          mytradesetlist, setallonoff, custlist, custdetail, insertcust, changesvr, getsetupitem,
                          incomesum,
@@ -74,6 +74,12 @@ def trade():
     setno1 = setups[0][8]
     setno2 = setups[1][8]
     setno3 = setups[2][8]
+    setlc1 = setups[0][4]
+    setlc2 = setups[1][4]
+    setlc3 = setups[2][4]
+    lcrate1 = setups[0][5]
+    lcrate2 = setups[1][5]
+    lcrate3 = setups[2][5]
     trset1 = setdetail(setno1)
     trset2 = setdetail(setno2)
     trset3 = setdetail(setno3)
@@ -120,6 +126,8 @@ def trade():
     listcoinc3 = coincand3[0]['close'].tolist()
     return render_template('./trade/mytrademain.html', wallet=wallet, list=orderlist, trset1=trset1, trset2=trset2,
                            trset3=trset3,
+                           lcchk1 = setlc1, lcchk2 = setlc2, lcchk3 = setlc3,
+                           lcrate1 = lcrate1, lcrate2 = lcrate2,lcrate3 = lcrate3,
                            coinopen1=listcoino1, coinclose1=listcoinc1, cprice1=crprice1, bsrate1=srate1,
                            coinopen2=listcoino2, coinclose2=listcoinc2, cprice2=crprice2, bsrate2=srate2,
                            coinopen3=listcoino3, coinclose3=listcoinc3, cprice3=crprice3, bsrate3=srate3,
@@ -668,6 +676,16 @@ def sethr():
     print(uno)
     print(hldrst)
     setholdreset(uno, hldrst)
+    return "YES"
+
+
+@app.route('/setlc', methods=['POST'])
+def setlc():
+    pla = request.get_data().decode('utf-8').split(',')
+    sno = pla[0]
+    rate = pla[1]
+    onoff = pla[2]
+    setlconoff(sno, rate, onoff)
     return "YES"
 
 
