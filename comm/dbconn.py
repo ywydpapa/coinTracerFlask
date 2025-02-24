@@ -429,6 +429,20 @@ def setholdreset(uno, hr):
         db.close()
 
 
+def setautostop(sno, yesno):
+    db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
+    cur14_2 = db.cursor()
+    try:
+        sql = "UPDATE traceSetup SET doubleYN = %s where setupNo=%s"
+        cur14_2.execute(sql, (yesno, sno))
+        db.commit()
+    except Exception as e:
+        print('자동 멈춤 기능 설정 오류', e)
+    finally:
+        cur14_2.close()
+        db.close()
+
+
 def getseton():
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur15 = db.cursor()

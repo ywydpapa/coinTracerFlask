@@ -95,7 +95,8 @@
                                                     <label class="custom-control-label" for="chklc1">  </label>
                                                 </div>
                                                     <input class="form-control-sm" style="text-align: right; border: #717384" type="number" name="lcrate1" id="lcrate1" value="{{ lcrate1 }}" max = "-1.5" min = "-10" step = "0.1">
-                                                    <label class="form-control-sm" for="lcrate1"> % </label>
+                                                    <label class="form-control-sm" for="lcrate1" style="margin-bottom:0"> % </label>
+                                                    <input type="checkbox" name="atstop1" id="atstop1" {% if setups[0][12] == 'Y'%}checked{% endif %}><label for="atstop1" style="margin-bottom:0"> 손절 후 자동OFF</label>
                                             </div>
                                             </td>
                                         </tr>
@@ -167,7 +168,8 @@
                                                     <label class="custom-control-label" for="chklc2">  </label>
                                                 </div>
                                                     <input class="form-control-sm" style="text-align: right; border: #717384" type="number" name="lcrate2" id="lcrate2" value="{{ lcrate2 }}" max = "-1.5" min = "-10" step = "0.1">
-                                                    <label class="form-control-sm" for="lcrate2"> % </label>
+                                                    <label class="form-control-sm" for="lcrate2" style="margin-bottom:0"> %    </label>
+                                                    <input type="checkbox" name="atstop2" id="atstop2" {% if setups[1][12] == 'Y'%}checked{% endif %}><label for="atstop2" style="margin-bottom:0"> 손절 후 자동OFF</label>
                                             </div>
                                             </td>
                                         </tr>
@@ -239,7 +241,8 @@
                                                     <label class="custom-control-label" for="chklc3">  </label>
                                                 </div>
                                                     <input class="form-control-sm" style="text-align: right; border: #717384" type="number" name="lcrate3" id="lcrate3" value="{{ lcrate3 }}" max = "-1.5" min = "-10" step = "0.1">
-                                                    <label class="form-control-sm" for="lcrate3"> % </label>
+                                                    <label class="form-control-sm" for="lcrate3" style="margin-bottom:0"> % </label>
+                                                    <input type="checkbox" name="atstop3" id="atstop3" {% if setups[2][12] == 'Y'%}checked{% endif %}><label for="atstop3" style="margin-bottom:0"> 손절 후 자동OFF</label>
                                             </div>
                                             </td>
                                         </tr>
@@ -472,6 +475,34 @@
         }
     });
 
+    $("#atstop1").change(function () {
+        var sno = {{ setups[0][0] }}
+        if ($('input[name="atstop1"]').is(":checked") === true) {
+            setautostop(sno,'Y');
+        } else {
+            setautostop(sno,'N');
+        }
+    });
+
+    $("#atstop2").change(function () {
+        var sno = {{ setups[1][0] }}
+        if ($('input[name="atstop2"]').is(":checked") === true) {
+            setautostop(sno,'Y');
+        } else {
+            setautostop(sno,'N');
+        }
+    });
+
+    $("#atstop3").change(function () {
+        var sno = {{ setups[2][0] }}
+        if ($('input[name="atstop3"]').is(":checked") === true) {
+            setautostop(sno,'Y');
+        } else {
+            setautostop(sno,'N');
+        }
+    });
+
+
     function calneed() {
         var stm1 = {{ setups[0][2] }};
         var stm2 = {{ setups[1][2] }};
@@ -535,6 +566,20 @@
         $.ajax({
             type: "POST",
             url: '/sethr',
+            data: data,
+            processData: false,
+            contentType: false,
+            success: (res) => {
+                location.reload();
+            }
+        });
+    }
+
+    function setautostop(sno, yesno){
+        data = [sno, yesno]
+        $.ajax({
+            type: "POST",
+            url: '/setatstop',
             data: data,
             processData: false,
             contentType: false,

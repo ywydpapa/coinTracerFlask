@@ -9,7 +9,7 @@ from comm.dbconn import (selectUsers, setKeys, checkwallet, tradehistory, hotcoi
                          setmypasswd, updateuserdetail, updatetrbidadmin, settingonoff, hotcoinlist, sethotcoin,
                          selectboardlist, boarddetail, resethotcoins, setLog, \
                          boardupdate, boardnewwrite, setholdreset, getmessage, cancelorder, gettop20, tradehistorys,
-                         servicestatus, sellc,
+                         servicestatus, sellc, setautostop,
                          tradelist, readmsg, gettradelog, tradedcoins, modifyLog, insertLog, getmytrlog, getmyincomes,
                          checkwalletremains, setlconoff,
                          mysettinglist, getsetupmax, erasebid, getsetups, setonoffs, editbidsetup, getlicence,
@@ -201,7 +201,7 @@ def coincollect():
     skey = request.args.get('skey')
     coinn = request.args.get('coinn')
     setLog(uno, skey, coinn)
-    path = "/coindetails?uno=" + uno + "&skey=" + skey + "&coinn=" + coinn;
+    path = "/coindetails?uno=" + uno + "&skey=" + skey + "&coinn=" + coinn
     return redirect(path)
 
 
@@ -676,6 +676,15 @@ def sethr():
     print(uno)
     print(hldrst)
     setholdreset(uno, hldrst)
+    return "YES"
+
+
+@app.route('/setatstop', methods=['POST'])
+def setatstop():
+    pla = request.get_data().decode('utf-8').split(',')
+    sno = pla[0]
+    yesno = pla[1]
+    setautostop(sno, yesno)
     return "YES"
 
 
