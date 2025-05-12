@@ -1,6 +1,6 @@
 import time
-from datetime import datetime
-
+from datetime import datetime, timezone
+import requests
 from flask import Flask, render_template, request, redirect, session
 from flask_bootstrap import Bootstrap
 from comm.dbconn import (selectUsers, setKeys, checkwallet, tradehistory, hotcoinlist, setupbid, getsetup, setonoff, \
@@ -278,6 +278,22 @@ def coindetails():
                            setcoin0=setcoin, sdate=sdate, reqitems=orderlist2, trcoinlist=trcoinlist)
 
 
+def all_cprice():
+    server_url = "https://api.upbit.com"
+    params = {"quote_currencies": "KRW"}
+    res = requests.get(server_url + "/v1/ticker/all", params=params)
+    data = res.json()
+    result = []
+    for item in data:
+        market = item.get("market")
+        trade_price = item.get("trade_price")
+        timestamp = item.get("timestamp")
+        if market and trade_price and timestamp:
+            time_str = datetime.fromtimestamp(timestamp / 1000, timezone.utc ).strftime('%Y-%m-%d %H:%M:%S')
+            result.append({"market": market,"trade_price": trade_price,"time_str": time_str })
+    return result
+
+
 @app.route('/tradestat', methods=['GET', 'POST'])
 def tradestat():
     if request.method == "POST":
@@ -289,14 +305,15 @@ def tradestat():
         walletitems = checkwallet(uno, skey)
         mysetcoins = getsetups(uno, 0)
         myset = []
+        gcprice = all_cprice()
+        price_dict = {item['market']: item['trade_price'] for item in gcprice}
         for mysetcoin in mysetcoins:
             myset.append(mysetcoin[6])
         for wallet in walletitems:
             if wallet['currency'] != "KRW":
                 ccoin = "KRW-" + wallet['currency']
                 try:
-                    cpr = pyupbit.get_current_price(ccoin)
-                    time.sleep(0.2)
+                    cpr = price_dict.get(ccoin,1)
                 except Exception as e:
                     cpr = 1
                 curr = [wallet['currency'], cpr]
