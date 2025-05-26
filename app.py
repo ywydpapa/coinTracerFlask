@@ -49,16 +49,19 @@ def dashboard():
     btccand = [dashcandle548("KRW-BTC")]
     ethcand = [dashcandle548("KRW-ETH")]
     xrpcand = [dashcandle548("KRW-XRP")]
+    dogecand = [dashcandle548("KRW-DOGE")]
     indexv = btccand[0].index.tolist()
     listbtc = btccand[0]['open'].tolist()
     listeth = ethcand[0]['open'].tolist()
     listxrp = xrpcand[0]['open'].tolist()
+    listdoge = dogecand[0]['open'].tolist()
     listbtcc = btccand[0]['close'].tolist()
     listethc = ethcand[0]['close'].tolist()
     listxrpc = xrpcand[0]['close'].tolist()
+    listdogec = dogecand[0]['close'].tolist()
     return render_template('./trade/dashboard.html', btccands=listbtc, ethcands=listeth, xrpcands=listxrp,
-                           btccandsc=listbtcc, ethcandsc=listethc, xrpcandsc=listxrpc, indexv=indexv,
-                           noticelist=noticelist, boarditem=boarditems)
+                           dogecand=listdoge, btccandsc=listbtcc, ethcandsc=listethc, xrpcandsc=listxrpc,
+                           dogecandc=listdogec, indexv=indexv, noticelist=noticelist, boarditem=boarditems)
 
 
 @app.route('/trade', methods=['GET', 'POST'])
@@ -126,8 +129,8 @@ def trade():
     listcoinc3 = coincand3[0]['close'].tolist()
     return render_template('./trade/mytrademain.html', wallet=wallet, list=orderlist, trset1=trset1, trset2=trset2,
                            trset3=trset3,
-                           lcchk1 = setlc1, lcchk2 = setlc2, lcchk3 = setlc3,
-                           lcrate1 = lcrate1, lcrate2 = lcrate2,lcrate3 = lcrate3,
+                           lcchk1=setlc1, lcchk2=setlc2, lcchk3=setlc3,
+                           lcrate1=lcrate1, lcrate2=lcrate2, lcrate3=lcrate3,
                            coinopen1=listcoino1, coinclose1=listcoinc1, cprice1=crprice1, bsrate1=srate1,
                            coinopen2=listcoino2, coinclose2=listcoinc2, cprice2=crprice2, bsrate2=srate2,
                            coinopen3=listcoino3, coinclose3=listcoinc3, cprice3=crprice3, bsrate3=srate3,
@@ -289,8 +292,8 @@ def all_cprice():
         trade_price = item.get("trade_price")
         timestamp = item.get("timestamp")
         if market and trade_price and timestamp:
-            time_str = datetime.fromtimestamp(timestamp / 1000, timezone.utc ).strftime('%Y-%m-%d %H:%M:%S')
-            result.append({"market": market,"trade_price": trade_price,"time_str": time_str })
+            time_str = datetime.fromtimestamp(timestamp / 1000, timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
+            result.append({"market": market, "trade_price": trade_price, "time_str": time_str})
     return result
 
 
@@ -313,7 +316,7 @@ def tradestat():
             if wallet['currency'] != "KRW":
                 ccoin = "KRW-" + wallet['currency']
                 try:
-                    cpr = price_dict.get(ccoin,1)
+                    cpr = price_dict.get(ccoin, 1)
                 except Exception as e:
                     cpr = 1
                 curr = [wallet['currency'], cpr]
@@ -908,7 +911,8 @@ def updateset():
         n9 = 'N'
     setno = request.form.get('setno')
     updatetrbidadmin(uno, skey, settitle, bidsteps, g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, r0, r1, r2, r3, r4, r5, r6,
-                     r7, r8, r9, b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, m0, m1, m2, m3, m4, m5, m6, m7, m8, m9,n0, n1, n2, n3, n4, n5, n6, n7, n8, n9, setno)
+                     r7, r8, r9, b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, n0, n1,
+                     n2, n3, n4, n5, n6, n7, n8, n9, setno)
     rows = selectsets()
     return render_template('./admin/setlistn.html', rows=rows)
 
